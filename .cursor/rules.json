@@ -1,0 +1,235 @@
+{
+  "name": "Enterprise Action Items Management System - Clean Architecture Rules",
+  "version": "1.0.0",
+  "description": "Architectural patterns and coding standards for a clean/hexagonal architecture implementation",
+  "rules": {
+    "architecture": {
+      "layers": {
+        "domain": {
+          "path": "domain/",
+          "description": "Core business logic and domain model",
+          "rules": [
+            "Must contain pure business logic with no infrastructure dependencies",
+            "Should implement rich domain model with encapsulated business rules",
+            "Must use value objects for immutable business concepts",
+            "Should implement domain services for complex business operations",
+            "Must maintain domain invariants and validation rules"
+          ],
+          "allowed_dependencies": ["commons"]
+        },
+        "ports": {
+          "port_in": {
+            "path": "port-in/",
+            "description": "Input ports defining use cases",
+            "rules": [
+              "Must define interfaces for all use cases",
+              "Should use command objects for input parameters",
+              "Must be technology-agnostic",
+              "Should follow interface segregation principle"
+            ],
+            "allowed_dependencies": ["domain", "commons"]
+          },
+          "port_out": {
+            "path": "port-out/",
+            "description": "Output ports for external interactions",
+            "rules": [
+              "Must define interfaces for all external interactions",
+              "Should be technology-agnostic",
+              "Must follow interface segregation principle",
+              "Should define clear contracts for persistence and external services"
+            ],
+            "allowed_dependencies": ["domain", "commons"]
+          }
+        },
+        "application": {
+          "path": "application/",
+          "description": "Use case implementation and orchestration",
+          "rules": [
+            "Must implement port-in interfaces",
+            "Should coordinate between domain and adapters",
+            "Must handle transaction management",
+            "Should implement cross-cutting concerns",
+            "Must not contain business logic (should be in domain)"
+          ],
+          "allowed_dependencies": ["adapter-in", "adapter-out", "domain"]
+        },
+        "adapters": {
+          "adapter_in": {
+            "path": "adapter-in/",
+            "description": "Input adapters for external requests",
+            "rules": [
+              "Must implement port-in interfaces",
+              "Should handle external format conversion",
+              "Must implement proper error handling",
+              "Should include REST controllers and Kafka consumers",
+              "Must use mappers for external-internal conversion"
+            ],
+            "allowed_dependencies": ["port-in", "commons", "avro"]
+          },
+          "adapter_out": {
+            "path": "adapter-out/",
+            "description": "Output adapters for external systems",
+            "rules": [
+              "Must implement port-out interfaces",
+              "Should handle persistence and external service integration",
+              "Must implement proper error handling",
+              "Should include JPA repositories and external service clients",
+              "Must use mappers for internal-external conversion"
+            ],
+            "allowed_dependencies": ["domain", "port-out"]
+          }
+        },
+        "commons": {
+          "path": "commons/",
+          "description": "Shared utilities and cross-cutting concerns",
+          "rules": [
+            "Must be framework-agnostic where possible",
+            "Should provide common utilities and helpers",
+            "Must implement cross-cutting concerns",
+            "Should not contain business logic"
+          ],
+          "allowed_dependencies": []
+        },
+        "avro": {
+          "path": "avro/",
+          "description": "Message schemas and data contracts",
+          "rules": [
+            "Must define all message schemas",
+            "Should be versioned appropriately",
+            "Must maintain backward compatibility",
+            "Should be used for all external communication"
+          ],
+          "allowed_dependencies": []
+        }
+      },
+      "dependency_rules": [
+        "Dependencies must point inward (domain is the center)",
+        "No circular dependencies allowed",
+        "Each layer can only depend on layers closer to the center",
+        "External frameworks should be isolated in adapters",
+        "Domain layer must have no external dependencies"
+      ],
+      "module_dependency_enforcement": {
+        "description": "Strict enforcement of internal module dependencies - DO NOT MODIFY",
+        "current_dependencies": {
+          "domain": ["commons"],
+          "port-in": ["domain", "commons"],
+          "port-out": ["domain", "commons"],
+          "adapter-in": ["port-in", "commons", "avro"],
+          "adapter-out": ["domain", "port-out"],
+          "application": ["adapter-in", "adapter-out", "domain"]
+        },
+        "enforcement_rules": [
+          "These dependencies are the CURRENT STATE and must not be changed without explicit approval",
+          "Any modification to module dependencies requires architectural review",
+          "External library dependencies (Spring, Kafka, etc.) are allowed but not tracked here",
+          "This section tracks only internal module-to-module dependencies",
+          "Circular dependencies are strictly forbidden",
+          "Dependencies must be declared in the module's pom.xml file"
+        ],
+        "validation": {
+          "domain": {
+            "allowed_internal_deps": ["commons"],
+            "forbidden_deps": ["port-in", "port-out", "adapter-in", "adapter-out", "application"]
+          },
+          "port-in": {
+            "allowed_internal_deps": ["domain", "commons"],
+            "forbidden_deps": ["port-out", "adapter-in", "adapter-out", "application"]
+          },
+          "port-out": {
+            "allowed_internal_deps": ["domain", "commons"],
+            "forbidden_deps": ["port-in", "adapter-in", "adapter-out", "application"]
+          },
+          "adapter-in": {
+            "allowed_internal_deps": ["port-in", "commons", "avro"],
+            "forbidden_deps": ["domain", "port-out", "adapter-out", "application"]
+          },
+          "adapter-out": {
+            "allowed_internal_deps": ["domain", "port-out"],
+            "forbidden_deps": ["port-in", "adapter-in", "application", "commons"]
+          },
+          "application": {
+            "allowed_internal_deps": ["adapter-in", "adapter-out", "domain"],
+            "forbidden_deps": ["port-in", "port-out", "commons"]
+          }
+        }
+      }
+    },
+    "coding_standards": {
+      "naming": {
+        "rules": [
+          "Use clear, descriptive names that reflect domain concepts",
+          "Follow Java naming conventions",
+          "Use consistent naming patterns across layers",
+          "Prefix interfaces with 'I' for ports",
+          "Suffix adapters with 'Adapter'",
+          "Use 'UseCase' suffix for port-in interfaces",
+          "Use 'Port' suffix for port-out interfaces"
+        ]
+      },
+      "packaging": {
+        "rules": [
+          "Each layer should have its own package structure",
+          "Use meaningful package names reflecting domain concepts",
+          "Group related functionality in subpackages",
+          "Keep package hierarchy flat where possible"
+        ]
+      },
+      "testing": {
+        "rules": [
+          "Each layer must have appropriate unit tests",
+          "Domain layer should have comprehensive test coverage",
+          "Use integration tests for adapters",
+          "Mock external dependencies in tests",
+          "Test business rules in domain layer",
+          "Use test fixtures for common test data"
+        ]
+      },
+      "error_handling": {
+        "rules": [
+          "Use custom domain exceptions for business errors",
+          "Implement proper error boundaries at adapter layer",
+          "Log errors appropriately at each layer",
+          "Use error codes for external communication",
+          "Implement proper error recovery mechanisms"
+        ]
+      },
+      "documentation": {
+        "rules": [
+          "Document all public APIs",
+          "Use Javadoc for all public methods",
+          "Document architectural decisions",
+          "Keep README up to date",
+          "Document complex business rules"
+        ]
+      }
+    },
+    "best_practices": {
+      "general": [
+        "Follow SOLID principles",
+        "Implement proper validation at each layer",
+        "Use immutable objects where possible",
+        "Implement proper logging and monitoring",
+        "Follow security best practices",
+        "Use proper transaction boundaries",
+        "Implement proper error handling",
+        "Use proper dependency injection",
+        "Follow clean code principles"
+      ],
+      "performance": [
+        "Use async processing where appropriate",
+        "Implement proper connection pooling",
+        "Use batch processing for bulk operations",
+        "Implement proper caching strategies",
+        "Monitor and optimize database queries"
+      ],
+      "security": [
+        "Validate all input data",
+        "Sanitize error messages",
+        "Use proper authentication and authorization",
+        "Implement proper audit logging",
+        "Follow secure coding practices"
+      ]
+    }
+  }
+} 
