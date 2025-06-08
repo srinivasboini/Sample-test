@@ -1,5 +1,6 @@
 com/example/application/service/ErrorHandlingService.class
 com/example/application/service/MasterConfigurationService.class
+com/example/application/config/DatabaseConfig.class
 com/example/application/ActionItemApplication.class
 com/example/application/config/ApplicationConfig.class
 com/example/application/config/KafkaConfig.class

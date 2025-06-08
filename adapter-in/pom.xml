@@ -25,6 +25,24 @@
             <artifactId>avro</artifactId>
         </dependency>
         <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    
+         <!-- Micrometer Observation API (if not already included) -->
+     <dependency>
+         <groupId>io.micrometer</groupId>
+         <artifactId>micrometer-observation</artifactId>
+     </dependency>
+     <!-- AOP support for @Observed annotation -->
+     <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-aop</artifactId>
+     </dependency>
+    
+ 
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>

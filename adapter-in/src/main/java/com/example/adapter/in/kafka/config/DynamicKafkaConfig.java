@@ -37,7 +37,6 @@ public class DynamicKafkaConfig implements KafkaListenerConfigurer {
 
     private final MessageHandler<ActionItemAsyncRequest> messageHandler;
     private final ActionItemAsyncRequestProvider actionItemAsyncRequestProvider;
-    
 
     @Bean
     public MessageHandlerMethodFactory messageHandlerMethodFactory() {

@@ -3,6 +3,8 @@ package com.example.adapter.in.kafka;
 import com.example.adapter.in.kafka.handler.ActionItemAsyncMessageHandler;
 import com.example.adapter.in.kafka.handler.MessageHandler;
 import com.example.avro.ActionItemAvro;
+
+import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
  *   <li>Manual offset management for reliability</li>
  *   <li>Comprehensive error handling and logging</li>
  *   <li>Thread pool execution for scalability</li>
+ *   <li>Observation and monitoring support</li>
  * </ul>
  * <p>
  * Processing Flow:
@@ -37,6 +40,9 @@ public class ActionItemKafkaConsumer {
     private final MessageHandler<ActionItemAsyncRequest> messageHandler;
     private final ActionItemAsyncRequestProvider actionItemAsyncRequestProvider;
 
+    @Observed(name = "kafka.consumer.action.item", 
+              contextualName = "kafka-consumer", 
+              lowCardinalityKeyValues = {"consumer.type", "action-item"})
     public void consume(ConsumerRecord<String, ActionItemAvro> record, Acknowledgment acknowledgment) {
         log.info("Received message with key: {} from topic: {} partition: {} offset: {}", record.key(),
                 record.topic(), record.partition(), record.offset());

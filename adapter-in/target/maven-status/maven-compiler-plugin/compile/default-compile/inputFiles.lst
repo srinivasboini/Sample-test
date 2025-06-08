@@ -8,6 +8,7 @@
 /Users/srinivasboini/workspace/Sample-test/adapter-in/src/main/java/com/example/adapter/in/kafka/ActionItemAvroMapper.java
 /Users/srinivasboini/workspace/Sample-test/adapter-in/src/main/java/com/example/adapter/in/kafka/handler/ActionItemMessageProcessor.java
 /Users/srinivasboini/workspace/Sample-test/adapter-in/src/main/java/com/example/adapter/in/web/CreateMasterConfigurationRequest.java
+/Users/srinivasboini/workspace/Sample-test/adapter-in/src/main/java/com/example/adapter/in/kafka/config/ObservationConfiguration.java
 /Users/srinivasboini/workspace/Sample-test/adapter-in/src/main/java/com/example/adapter/in/web/MasterConfigurationController.java
 /Users/srinivasboini/workspace/Sample-test/adapter-in/src/main/java/com/example/adapter/in/web/ActionItemController.java
 /Users/srinivasboini/workspace/Sample-test/adapter-in/src/main/java/com/example/adapter/in/kafka/handler/MessageHandler.java

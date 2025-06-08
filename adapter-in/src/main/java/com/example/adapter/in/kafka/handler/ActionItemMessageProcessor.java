@@ -4,6 +4,10 @@ import com.example.adapter.in.kafka.ActionItemAsyncRequest;
 import com.example.adapter.in.kafka.ActionItemAvroMapper;
 import com.example.port.in.ProcessActionItemCommand;
 import com.example.port.in.ReceiveActionItemUseCase;
+
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
+import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -40,6 +44,7 @@ class ActionItemMessageProcessor {
 
     private final ReceiveActionItemUseCase receiveActionItemUseCase;
     private final ActionItemAvroMapper actionItemAvroMapper;
+    private final ObservationRegistry observationRegistry;
 
     /**
      * Processes a single action item message.
@@ -49,7 +54,14 @@ class ActionItemMessageProcessor {
      * @throws RuntimeException if processing fails
      */
     public void process(ActionItemAsyncRequest actionItemAsyncRequest) {
+        Observation.createNotStarted("kafka.consumer", observationRegistry)
+        .lowCardinalityKeyValue("kafka.topic", "my-topic")
+        .observe(() -> {
+            // Your business logic here
+            log.info("Processing action item message: {}", actionItemAsyncRequest);
         ProcessActionItemCommand command = actionItemAvroMapper.toCommand(actionItemAsyncRequest);
         receiveActionItemUseCase.processActionItem(command);
+        });
+        
     }
 }

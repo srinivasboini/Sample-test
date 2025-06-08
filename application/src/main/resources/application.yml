@@ -7,6 +7,9 @@
 # 4. Logging Levels
 # 5. Cache Configuration
 
+server:
+  port: 18080
+
 spring:
   # Kafka Configuration
   # ------------------
@@ -41,18 +44,36 @@ spring:
       # Automatically start listeners only when Kafka is available
       auto-startup: false
 
-
   datasource:
-    url: jdbc:h2:mem:actionitemsdb
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/sample_db
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+    
+    hikari:
+      pool-name: PostgreSQL-HikariPool
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 600000
+      leak-detection-threshold: 60000
+      initialization-fail-timeout: -1
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 25
+          order_inserts: true
+          order_updates: true
+        query:
+          plan_cache_max_size: 2048
 
   h2:
     console:
@@ -74,5 +95,25 @@ logging:
   level:
     com.example: DEBUG
     org.springframework.kafka: INFO
+    com.example.application.config.DatabaseConfig: INFO
+    com.zaxxer.hikari: INFO
+    org.hibernate.SQL: WARN
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+# Management endpoints for monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+  observations:
+    key-values:
+      application: action-items-service 
