@@ -175,7 +175,7 @@ graph LR
     
     subgraph "Consumers"
         C1[Consumer v1<br/>Schema v1<br/>Can read v2 data]
-        C2[Consumer v2<br/>Schema v1<br/>Can read v2 data]
+        C2[Consumer v2<br/>Schema v2<br/>Can read v2 data]
     end
     
     P -->|New Data| T
