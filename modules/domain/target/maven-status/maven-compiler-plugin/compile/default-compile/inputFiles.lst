@@ -1,0 +1,9 @@
+/Users/srinivasboini/workspace/Sample-test/modules/domain/src/main/java/com/example/domain/model/InvalidCategoryTypeException.java
+/Users/srinivasboini/workspace/Sample-test/modules/domain/src/main/java/com/example/domain/model/ActionItemStatus.java
+/Users/srinivasboini/workspace/Sample-test/modules/domain/src/main/java/com/example/domain/service/ActionItemConfigurationService.java
+/Users/srinivasboini/workspace/Sample-test/modules/domain/src/main/java/com/example/domain/model/ProcessingError.java
+/Users/srinivasboini/workspace/Sample-test/modules/domain/src/main/java/com/example/domain/model/ActionItemConfiguration.java
+/Users/srinivasboini/workspace/Sample-test/modules/domain/src/main/java/com/example/domain/model/ActionItem.java
+/Users/srinivasboini/workspace/Sample-test/modules/domain/src/main/java/com/example/domain/model/MasterConfiguration.java
+/Users/srinivasboini/workspace/Sample-test/modules/domain/src/main/java/com/example/domain/service/MasterConfigurationDomainService.java
+/Users/srinivasboini/workspace/Sample-test/modules/domain/src/main/java/com/example/domain/service/ActionItemDomainService.java

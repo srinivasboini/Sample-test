@@ -8,14 +8,14 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>domain</module>
-        <module>port-in</module>
-        <module>port-out</module>
-        <module>adapter-in</module>
-        <module>adapter-out</module>
-        <module>commons</module>
-        <module>application</module>
-        <module>avro</module>
+        <module>modules/domain</module>
+        <module>modules/port-in</module>
+        <module>modules/port-out</module>
+        <module>modules/adapter-in</module>
+        <module>modules/adapter-out</module>
+        <module>modules/commons</module>
+        <module>modules/application</module>
+        <module>modules/avro</module>
     </modules>
 
     <properties>
@@ -26,6 +26,9 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
+        
+        <!-- Avro Independent Versioning -->
+        <avro.schema.version>1.0.0</avro.schema.version>
     </properties>
 
     <dependencyManagement>
@@ -76,8 +79,8 @@
             </dependency>
             <dependency>
                 <groupId>com.example</groupId>
-                <artifactId>avro</artifactId>
-                <version>${project.version}</version>
+                <artifactId>avro-schemas</artifactId>
+                <version>${avro.schema.version}</version>
             </dependency>
 
             <dependency>
@@ -107,6 +110,19 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Nexus Release Repository</name>
+            <url>${env.NEXUS_BASE_URL}/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>${env.NEXUS_BASE_URL}/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -130,6 +146,36 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.3.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.5.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <doclint>none</doclint>
+                        <failOnError>false</failOnError>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
