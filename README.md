@@ -12,6 +12,85 @@ A robust, scalable, and maintainable system for managing action items (tasks) in
 - **Event-Driven**: Asynchronous processing with Kafka for scalability
 - **SOLID Principles**: Interface segregation, dependency inversion, and single responsibility
 
+### Module Dependency Diagram
+
+```mermaid
+graph TB
+    %% Core Modules
+    Commons["📦 commons<br/>Shared utilities<br/>Cross-cutting concerns"]
+    Domain["🏛️ domain<br/>Business Logic<br/>Core Entities"]
+    PortIn["📥 port-in<br/>Input Contracts<br/>Use Cases"]
+    PortOut["📤 port-out<br/>Output Contracts<br/>External Interfaces"]
+    
+    %% Adapter Modules  
+    AdapterIn["🔌 adapter-in<br/>Input Handlers<br/>Kafka/REST"]
+    AdapterOut["🔌 adapter-out<br/>External Systems<br/>JPA/Database"]
+    
+    %% Application and Schema Modules
+    Application["🚀 application<br/>Main Application<br/>Orchestration"]
+    Avro["📋 avro<br/>Message Schemas<br/>Data Contracts"]
+    
+    %% Dependencies - Foundation Layer
+    Domain --> Commons
+    PortIn --> Domain
+    PortIn --> Commons
+    PortOut --> Domain
+    PortOut --> Commons
+    
+    %% Dependencies - Adapter Layer
+    AdapterIn --> PortIn
+    AdapterIn --> Commons
+    AdapterIn --> Avro
+    AdapterOut --> PortOut
+    AdapterOut --> Commons
+    
+    %% Dependencies - Application Layer
+    Application --> Domain
+    Application --> PortIn
+    Application --> PortOut
+    Application --> AdapterIn
+    Application --> AdapterOut
+    Application --> Commons
+    Application --> Avro
+    
+    %% External Dependencies
+    ExtKafka["☁️ Apache Kafka<br/>Message Broker"]
+    ExtDB["🗄️ PostgreSQL<br/>Database"]
+    ExtSpring["🌱 Spring Boot<br/>Framework"]
+    
+    %% External connections (Data Flow)
+    ExtKafka -.-> AdapterIn
+    AdapterOut -.-> ExtDB
+    Application -.-> ExtSpring
+    
+    %% Styling
+    classDef coreModule fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef adapterModule fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef appModule fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef schemaModule fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef external fill:#fafafa,stroke:#424242,stroke-width:1px,stroke-dasharray: 5 5
+    
+    class Commons,Domain,PortIn,PortOut coreModule
+    class AdapterIn,AdapterOut adapterModule
+    class Application appModule
+    class Avro schemaModule
+    class ExtKafka,ExtDB,ExtSpring external
+```
+
+The diagram above illustrates the modular architecture and dependency relationships:
+
+- **🔵 Core Modules** (Blue): Foundation layer containing business logic and contracts
+- **🟣 Adapter Modules** (Purple): Interface layer handling external system interactions
+- **🟢 Application Module** (Green): Orchestration layer coordinating all components
+- **🟠 Schema Module** (Orange): Data contract definitions
+- **⚪ External Systems** (Gray, dashed): External dependencies and services
+
+**Key Architectural Principles Demonstrated:**
+- **Dependency Inversion**: Core domain has no external dependencies
+- **Clean Architecture**: Dependencies point inward toward the domain
+- **Separation of Concerns**: Each module has a single, well-defined responsibility
+- **Interface Segregation**: Ports define focused contracts
+
 ### Module Structure
 
 #### 1. Domain Module (`domain/`)
