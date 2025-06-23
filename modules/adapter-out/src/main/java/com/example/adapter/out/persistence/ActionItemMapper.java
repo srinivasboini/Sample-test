@@ -9,6 +9,7 @@ public class ActionItemMapper {
     public ActionItemJpaEntity toJpaEntity(ActionItem domain) {
         return ActionItemJpaEntity.builder()
                 .id(domain.getId())
+                .uniqueId(domain.getUniqueId())
                 .title(domain.getTitle())
                 .description(domain.getDescription())
                 .assignee(domain.getAssignee())
@@ -24,6 +25,7 @@ public class ActionItemMapper {
     public ActionItem toDomainEntity(ActionItemJpaEntity entity) {
         return ActionItem.builder()
                 .id(entity.getId())
+                .uniqueId(entity.getUniqueId())
                 .title(entity.getTitle())
                 .description(entity.getDescription())
                 .assignee(entity.getAssignee())

@@ -15,10 +15,10 @@ import org.apache.avro.message.SchemaStore;
 /** Schema for Action Items in the system. This schema defines the contract for messages exchanged via Kafka. */
 @org.apache.avro.specific.AvroGenerated
 public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 8914299500649743483L;
+  private static final long serialVersionUID = 68454423017734972L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"ActionItemAvro\",\"namespace\":\"com.example.avro\",\"doc\":\"Schema for Action Items in the system. This schema defines the contract for messages exchanged via Kafka.\",\"fields\":[{\"name\":\"id\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Unique identifier for the action item. Generated as UUID.\"},{\"name\":\"title\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Title of the action item. Must be between 3 and 100 characters.\"},{\"name\":\"description\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Detailed description of what needs to be done. Optional for PENDING items, required for others.\"},{\"name\":\"assignee\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Person or team assigned to complete this item. Required for non-PENDING items.\"},{\"name\":\"category\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Category of the action item.\"},{\"name\":\"typeCode\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Type code of the action item.\"},{\"name\":\"status\",\"type\":{\"type\":\"enum\",\"name\":\"ActionItemStatusAvro\",\"doc\":\"Possible states of an action item in its lifecycle.\",\"symbols\":[\"OPEN\",\"CLOSE\",\"UNKNOWN\",\"PENDING\",\"IN_PROGRESS\",\"COMPLETED\",\"CANCELLED\"]},\"doc\":\"Current status of the action item. Transitions must follow defined workflow.\"},{\"name\":\"dueDate\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"},\"doc\":\"When this action item is due. Must be after creation date.\"},{\"name\":\"createdAt\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"},\"doc\":\"Timestamp when this action item was created.\"},{\"name\":\"updatedAt\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"},\"doc\":\"Timestamp of the last update to this action item.\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"ActionItemAvro\",\"namespace\":\"com.example.avro\",\"doc\":\"Schema for Action Items in the system. This schema defines the contract for messages exchanged via Kafka.\",\"fields\":[{\"name\":\"id\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Unique identifier for the action item. Generated as UUID.\"},{\"name\":\"uniqueId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Business unique identifier for the action item. Used to track action item lifecycle (open/close).\"},{\"name\":\"title\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Title of the action item. Must be between 3 and 100 characters.\"},{\"name\":\"description\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Detailed description of what needs to be done. Optional for PENDING items, required for others.\"},{\"name\":\"assignee\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Person or team assigned to complete this item. Required for non-PENDING items.\"},{\"name\":\"category\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Category of the action item.\"},{\"name\":\"typeCode\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"},\"doc\":\"Type code of the action item.\"},{\"name\":\"status\",\"type\":{\"type\":\"enum\",\"name\":\"ActionItemStatusAvro\",\"doc\":\"Possible states of an action item in its lifecycle.\",\"symbols\":[\"OPEN\",\"CLOSE\",\"UNKNOWN\",\"PENDING\",\"IN_PROGRESS\",\"COMPLETED\",\"CANCELLED\"]},\"doc\":\"Current status of the action item. Transitions must follow defined workflow.\"},{\"name\":\"dueDate\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"},\"doc\":\"When this action item is due. Must be after creation date.\"},{\"name\":\"createdAt\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"},\"doc\":\"Timestamp when this action item was created.\"},{\"name\":\"updatedAt\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"},\"doc\":\"Timestamp of the last update to this action item.\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -79,6 +79,8 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
 
   /** Unique identifier for the action item. Generated as UUID. */
   private java.lang.String id;
+  /** Business unique identifier for the action item. Used to track action item lifecycle (open/close). */
+  private java.lang.String uniqueId;
   /** Title of the action item. Must be between 3 and 100 characters. */
   private java.lang.String title;
   /** Detailed description of what needs to be done. Optional for PENDING items, required for others. */
@@ -108,6 +110,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
   /**
    * All-args constructor.
    * @param id Unique identifier for the action item. Generated as UUID.
+   * @param uniqueId Business unique identifier for the action item. Used to track action item lifecycle (open/close).
    * @param title Title of the action item. Must be between 3 and 100 characters.
    * @param description Detailed description of what needs to be done. Optional for PENDING items, required for others.
    * @param assignee Person or team assigned to complete this item. Required for non-PENDING items.
@@ -118,8 +121,9 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
    * @param createdAt Timestamp when this action item was created.
    * @param updatedAt Timestamp of the last update to this action item.
    */
-  public ActionItemAvro(java.lang.String id, java.lang.String title, java.lang.String description, java.lang.String assignee, java.lang.String category, java.lang.String typeCode, com.example.avro.ActionItemStatusAvro status, java.time.Instant dueDate, java.time.Instant createdAt, java.time.Instant updatedAt) {
+  public ActionItemAvro(java.lang.String id, java.lang.String uniqueId, java.lang.String title, java.lang.String description, java.lang.String assignee, java.lang.String category, java.lang.String typeCode, com.example.avro.ActionItemStatusAvro status, java.time.Instant dueDate, java.time.Instant createdAt, java.time.Instant updatedAt) {
     this.id = id;
+    this.uniqueId = uniqueId;
     this.title = title;
     this.description = description;
     this.assignee = assignee;
@@ -142,21 +146,23 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
   public java.lang.Object get(int field$) {
     switch (field$) {
     case 0: return id;
-    case 1: return title;
-    case 2: return description;
-    case 3: return assignee;
-    case 4: return category;
-    case 5: return typeCode;
-    case 6: return status;
-    case 7: return dueDate;
-    case 8: return createdAt;
-    case 9: return updatedAt;
+    case 1: return uniqueId;
+    case 2: return title;
+    case 3: return description;
+    case 4: return assignee;
+    case 5: return category;
+    case 6: return typeCode;
+    case 7: return status;
+    case 8: return dueDate;
+    case 9: return createdAt;
+    case 10: return updatedAt;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
   private static final org.apache.avro.Conversion<?>[] conversions =
       new org.apache.avro.Conversion<?>[] {
+      null,
       null,
       null,
       null,
@@ -181,15 +187,16 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: id = value$ != null ? value$.toString() : null; break;
-    case 1: title = value$ != null ? value$.toString() : null; break;
-    case 2: description = value$ != null ? value$.toString() : null; break;
-    case 3: assignee = value$ != null ? value$.toString() : null; break;
-    case 4: category = value$ != null ? value$.toString() : null; break;
-    case 5: typeCode = value$ != null ? value$.toString() : null; break;
-    case 6: status = (com.example.avro.ActionItemStatusAvro)value$; break;
-    case 7: dueDate = (java.time.Instant)value$; break;
-    case 8: createdAt = (java.time.Instant)value$; break;
-    case 9: updatedAt = (java.time.Instant)value$; break;
+    case 1: uniqueId = value$ != null ? value$.toString() : null; break;
+    case 2: title = value$ != null ? value$.toString() : null; break;
+    case 3: description = value$ != null ? value$.toString() : null; break;
+    case 4: assignee = value$ != null ? value$.toString() : null; break;
+    case 5: category = value$ != null ? value$.toString() : null; break;
+    case 6: typeCode = value$ != null ? value$.toString() : null; break;
+    case 7: status = (com.example.avro.ActionItemStatusAvro)value$; break;
+    case 8: dueDate = (java.time.Instant)value$; break;
+    case 9: createdAt = (java.time.Instant)value$; break;
+    case 10: updatedAt = (java.time.Instant)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -210,6 +217,24 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
    */
   public void setId(java.lang.String value) {
     this.id = value;
+  }
+
+  /**
+   * Gets the value of the 'uniqueId' field.
+   * @return Business unique identifier for the action item. Used to track action item lifecycle (open/close).
+   */
+  public java.lang.String getUniqueId() {
+    return uniqueId;
+  }
+
+
+  /**
+   * Sets the value of the 'uniqueId' field.
+   * Business unique identifier for the action item. Used to track action item lifecycle (open/close).
+   * @param value the value to set.
+   */
+  public void setUniqueId(java.lang.String value) {
+    this.uniqueId = value;
   }
 
   /**
@@ -417,6 +442,8 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
 
     /** Unique identifier for the action item. Generated as UUID. */
     private java.lang.String id;
+    /** Business unique identifier for the action item. Used to track action item lifecycle (open/close). */
+    private java.lang.String uniqueId;
     /** Title of the action item. Must be between 3 and 100 characters. */
     private java.lang.String title;
     /** Detailed description of what needs to be done. Optional for PENDING items, required for others. */
@@ -451,41 +478,45 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
         this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = other.fieldSetFlags()[0];
       }
-      if (isValidValue(fields()[1], other.title)) {
-        this.title = data().deepCopy(fields()[1].schema(), other.title);
+      if (isValidValue(fields()[1], other.uniqueId)) {
+        this.uniqueId = data().deepCopy(fields()[1].schema(), other.uniqueId);
         fieldSetFlags()[1] = other.fieldSetFlags()[1];
       }
-      if (isValidValue(fields()[2], other.description)) {
-        this.description = data().deepCopy(fields()[2].schema(), other.description);
+      if (isValidValue(fields()[2], other.title)) {
+        this.title = data().deepCopy(fields()[2].schema(), other.title);
         fieldSetFlags()[2] = other.fieldSetFlags()[2];
       }
-      if (isValidValue(fields()[3], other.assignee)) {
-        this.assignee = data().deepCopy(fields()[3].schema(), other.assignee);
+      if (isValidValue(fields()[3], other.description)) {
+        this.description = data().deepCopy(fields()[3].schema(), other.description);
         fieldSetFlags()[3] = other.fieldSetFlags()[3];
       }
-      if (isValidValue(fields()[4], other.category)) {
-        this.category = data().deepCopy(fields()[4].schema(), other.category);
+      if (isValidValue(fields()[4], other.assignee)) {
+        this.assignee = data().deepCopy(fields()[4].schema(), other.assignee);
         fieldSetFlags()[4] = other.fieldSetFlags()[4];
       }
-      if (isValidValue(fields()[5], other.typeCode)) {
-        this.typeCode = data().deepCopy(fields()[5].schema(), other.typeCode);
+      if (isValidValue(fields()[5], other.category)) {
+        this.category = data().deepCopy(fields()[5].schema(), other.category);
         fieldSetFlags()[5] = other.fieldSetFlags()[5];
       }
-      if (isValidValue(fields()[6], other.status)) {
-        this.status = data().deepCopy(fields()[6].schema(), other.status);
+      if (isValidValue(fields()[6], other.typeCode)) {
+        this.typeCode = data().deepCopy(fields()[6].schema(), other.typeCode);
         fieldSetFlags()[6] = other.fieldSetFlags()[6];
       }
-      if (isValidValue(fields()[7], other.dueDate)) {
-        this.dueDate = data().deepCopy(fields()[7].schema(), other.dueDate);
+      if (isValidValue(fields()[7], other.status)) {
+        this.status = data().deepCopy(fields()[7].schema(), other.status);
         fieldSetFlags()[7] = other.fieldSetFlags()[7];
       }
-      if (isValidValue(fields()[8], other.createdAt)) {
-        this.createdAt = data().deepCopy(fields()[8].schema(), other.createdAt);
+      if (isValidValue(fields()[8], other.dueDate)) {
+        this.dueDate = data().deepCopy(fields()[8].schema(), other.dueDate);
         fieldSetFlags()[8] = other.fieldSetFlags()[8];
       }
-      if (isValidValue(fields()[9], other.updatedAt)) {
-        this.updatedAt = data().deepCopy(fields()[9].schema(), other.updatedAt);
+      if (isValidValue(fields()[9], other.createdAt)) {
+        this.createdAt = data().deepCopy(fields()[9].schema(), other.createdAt);
         fieldSetFlags()[9] = other.fieldSetFlags()[9];
+      }
+      if (isValidValue(fields()[10], other.updatedAt)) {
+        this.updatedAt = data().deepCopy(fields()[10].schema(), other.updatedAt);
+        fieldSetFlags()[10] = other.fieldSetFlags()[10];
       }
     }
 
@@ -499,41 +530,45 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
         this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.title)) {
-        this.title = data().deepCopy(fields()[1].schema(), other.title);
+      if (isValidValue(fields()[1], other.uniqueId)) {
+        this.uniqueId = data().deepCopy(fields()[1].schema(), other.uniqueId);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.description)) {
-        this.description = data().deepCopy(fields()[2].schema(), other.description);
+      if (isValidValue(fields()[2], other.title)) {
+        this.title = data().deepCopy(fields()[2].schema(), other.title);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.assignee)) {
-        this.assignee = data().deepCopy(fields()[3].schema(), other.assignee);
+      if (isValidValue(fields()[3], other.description)) {
+        this.description = data().deepCopy(fields()[3].schema(), other.description);
         fieldSetFlags()[3] = true;
       }
-      if (isValidValue(fields()[4], other.category)) {
-        this.category = data().deepCopy(fields()[4].schema(), other.category);
+      if (isValidValue(fields()[4], other.assignee)) {
+        this.assignee = data().deepCopy(fields()[4].schema(), other.assignee);
         fieldSetFlags()[4] = true;
       }
-      if (isValidValue(fields()[5], other.typeCode)) {
-        this.typeCode = data().deepCopy(fields()[5].schema(), other.typeCode);
+      if (isValidValue(fields()[5], other.category)) {
+        this.category = data().deepCopy(fields()[5].schema(), other.category);
         fieldSetFlags()[5] = true;
       }
-      if (isValidValue(fields()[6], other.status)) {
-        this.status = data().deepCopy(fields()[6].schema(), other.status);
+      if (isValidValue(fields()[6], other.typeCode)) {
+        this.typeCode = data().deepCopy(fields()[6].schema(), other.typeCode);
         fieldSetFlags()[6] = true;
       }
-      if (isValidValue(fields()[7], other.dueDate)) {
-        this.dueDate = data().deepCopy(fields()[7].schema(), other.dueDate);
+      if (isValidValue(fields()[7], other.status)) {
+        this.status = data().deepCopy(fields()[7].schema(), other.status);
         fieldSetFlags()[7] = true;
       }
-      if (isValidValue(fields()[8], other.createdAt)) {
-        this.createdAt = data().deepCopy(fields()[8].schema(), other.createdAt);
+      if (isValidValue(fields()[8], other.dueDate)) {
+        this.dueDate = data().deepCopy(fields()[8].schema(), other.dueDate);
         fieldSetFlags()[8] = true;
       }
-      if (isValidValue(fields()[9], other.updatedAt)) {
-        this.updatedAt = data().deepCopy(fields()[9].schema(), other.updatedAt);
+      if (isValidValue(fields()[9], other.createdAt)) {
+        this.createdAt = data().deepCopy(fields()[9].schema(), other.createdAt);
         fieldSetFlags()[9] = true;
+      }
+      if (isValidValue(fields()[10], other.updatedAt)) {
+        this.updatedAt = data().deepCopy(fields()[10].schema(), other.updatedAt);
+        fieldSetFlags()[10] = true;
       }
     }
 
@@ -582,6 +617,50 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
     }
 
     /**
+      * Gets the value of the 'uniqueId' field.
+      * Business unique identifier for the action item. Used to track action item lifecycle (open/close).
+      * @return The value.
+      */
+    public java.lang.String getUniqueId() {
+      return uniqueId;
+    }
+
+
+    /**
+      * Sets the value of the 'uniqueId' field.
+      * Business unique identifier for the action item. Used to track action item lifecycle (open/close).
+      * @param value The value of 'uniqueId'.
+      * @return This builder.
+      */
+    public com.example.avro.ActionItemAvro.Builder setUniqueId(java.lang.String value) {
+      validate(fields()[1], value);
+      this.uniqueId = value;
+      fieldSetFlags()[1] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'uniqueId' field has been set.
+      * Business unique identifier for the action item. Used to track action item lifecycle (open/close).
+      * @return True if the 'uniqueId' field has been set, false otherwise.
+      */
+    public boolean hasUniqueId() {
+      return fieldSetFlags()[1];
+    }
+
+
+    /**
+      * Clears the value of the 'uniqueId' field.
+      * Business unique identifier for the action item. Used to track action item lifecycle (open/close).
+      * @return This builder.
+      */
+    public com.example.avro.ActionItemAvro.Builder clearUniqueId() {
+      uniqueId = null;
+      fieldSetFlags()[1] = false;
+      return this;
+    }
+
+    /**
       * Gets the value of the 'title' field.
       * Title of the action item. Must be between 3 and 100 characters.
       * @return The value.
@@ -598,9 +677,9 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder setTitle(java.lang.String value) {
-      validate(fields()[1], value);
+      validate(fields()[2], value);
       this.title = value;
-      fieldSetFlags()[1] = true;
+      fieldSetFlags()[2] = true;
       return this;
     }
 
@@ -610,7 +689,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return True if the 'title' field has been set, false otherwise.
       */
     public boolean hasTitle() {
-      return fieldSetFlags()[1];
+      return fieldSetFlags()[2];
     }
 
 
@@ -621,7 +700,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       */
     public com.example.avro.ActionItemAvro.Builder clearTitle() {
       title = null;
-      fieldSetFlags()[1] = false;
+      fieldSetFlags()[2] = false;
       return this;
     }
 
@@ -642,9 +721,9 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder setDescription(java.lang.String value) {
-      validate(fields()[2], value);
+      validate(fields()[3], value);
       this.description = value;
-      fieldSetFlags()[2] = true;
+      fieldSetFlags()[3] = true;
       return this;
     }
 
@@ -654,7 +733,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return True if the 'description' field has been set, false otherwise.
       */
     public boolean hasDescription() {
-      return fieldSetFlags()[2];
+      return fieldSetFlags()[3];
     }
 
 
@@ -665,7 +744,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       */
     public com.example.avro.ActionItemAvro.Builder clearDescription() {
       description = null;
-      fieldSetFlags()[2] = false;
+      fieldSetFlags()[3] = false;
       return this;
     }
 
@@ -686,9 +765,9 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder setAssignee(java.lang.String value) {
-      validate(fields()[3], value);
+      validate(fields()[4], value);
       this.assignee = value;
-      fieldSetFlags()[3] = true;
+      fieldSetFlags()[4] = true;
       return this;
     }
 
@@ -698,7 +777,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return True if the 'assignee' field has been set, false otherwise.
       */
     public boolean hasAssignee() {
-      return fieldSetFlags()[3];
+      return fieldSetFlags()[4];
     }
 
 
@@ -709,7 +788,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       */
     public com.example.avro.ActionItemAvro.Builder clearAssignee() {
       assignee = null;
-      fieldSetFlags()[3] = false;
+      fieldSetFlags()[4] = false;
       return this;
     }
 
@@ -730,9 +809,9 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder setCategory(java.lang.String value) {
-      validate(fields()[4], value);
+      validate(fields()[5], value);
       this.category = value;
-      fieldSetFlags()[4] = true;
+      fieldSetFlags()[5] = true;
       return this;
     }
 
@@ -742,7 +821,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return True if the 'category' field has been set, false otherwise.
       */
     public boolean hasCategory() {
-      return fieldSetFlags()[4];
+      return fieldSetFlags()[5];
     }
 
 
@@ -753,7 +832,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       */
     public com.example.avro.ActionItemAvro.Builder clearCategory() {
       category = null;
-      fieldSetFlags()[4] = false;
+      fieldSetFlags()[5] = false;
       return this;
     }
 
@@ -774,9 +853,9 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder setTypeCode(java.lang.String value) {
-      validate(fields()[5], value);
+      validate(fields()[6], value);
       this.typeCode = value;
-      fieldSetFlags()[5] = true;
+      fieldSetFlags()[6] = true;
       return this;
     }
 
@@ -786,7 +865,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return True if the 'typeCode' field has been set, false otherwise.
       */
     public boolean hasTypeCode() {
-      return fieldSetFlags()[5];
+      return fieldSetFlags()[6];
     }
 
 
@@ -797,7 +876,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       */
     public com.example.avro.ActionItemAvro.Builder clearTypeCode() {
       typeCode = null;
-      fieldSetFlags()[5] = false;
+      fieldSetFlags()[6] = false;
       return this;
     }
 
@@ -818,9 +897,9 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder setStatus(com.example.avro.ActionItemStatusAvro value) {
-      validate(fields()[6], value);
+      validate(fields()[7], value);
       this.status = value;
-      fieldSetFlags()[6] = true;
+      fieldSetFlags()[7] = true;
       return this;
     }
 
@@ -830,7 +909,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return True if the 'status' field has been set, false otherwise.
       */
     public boolean hasStatus() {
-      return fieldSetFlags()[6];
+      return fieldSetFlags()[7];
     }
 
 
@@ -841,7 +920,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       */
     public com.example.avro.ActionItemAvro.Builder clearStatus() {
       status = null;
-      fieldSetFlags()[6] = false;
+      fieldSetFlags()[7] = false;
       return this;
     }
 
@@ -862,9 +941,9 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder setDueDate(java.time.Instant value) {
-      validate(fields()[7], value);
+      validate(fields()[8], value);
       this.dueDate = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
-      fieldSetFlags()[7] = true;
+      fieldSetFlags()[8] = true;
       return this;
     }
 
@@ -874,7 +953,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return True if the 'dueDate' field has been set, false otherwise.
       */
     public boolean hasDueDate() {
-      return fieldSetFlags()[7];
+      return fieldSetFlags()[8];
     }
 
 
@@ -884,7 +963,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder clearDueDate() {
-      fieldSetFlags()[7] = false;
+      fieldSetFlags()[8] = false;
       return this;
     }
 
@@ -905,9 +984,9 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder setCreatedAt(java.time.Instant value) {
-      validate(fields()[8], value);
+      validate(fields()[9], value);
       this.createdAt = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
-      fieldSetFlags()[8] = true;
+      fieldSetFlags()[9] = true;
       return this;
     }
 
@@ -917,7 +996,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return True if the 'createdAt' field has been set, false otherwise.
       */
     public boolean hasCreatedAt() {
-      return fieldSetFlags()[8];
+      return fieldSetFlags()[9];
     }
 
 
@@ -927,7 +1006,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder clearCreatedAt() {
-      fieldSetFlags()[8] = false;
+      fieldSetFlags()[9] = false;
       return this;
     }
 
@@ -948,9 +1027,9 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder setUpdatedAt(java.time.Instant value) {
-      validate(fields()[9], value);
+      validate(fields()[10], value);
       this.updatedAt = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
-      fieldSetFlags()[9] = true;
+      fieldSetFlags()[10] = true;
       return this;
     }
 
@@ -960,7 +1039,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return True if the 'updatedAt' field has been set, false otherwise.
       */
     public boolean hasUpdatedAt() {
-      return fieldSetFlags()[9];
+      return fieldSetFlags()[10];
     }
 
 
@@ -970,7 +1049,7 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       * @return This builder.
       */
     public com.example.avro.ActionItemAvro.Builder clearUpdatedAt() {
-      fieldSetFlags()[9] = false;
+      fieldSetFlags()[10] = false;
       return this;
     }
 
@@ -980,15 +1059,16 @@ public class ActionItemAvro extends org.apache.avro.specific.SpecificRecordBase 
       try {
         ActionItemAvro record = new ActionItemAvro();
         record.id = fieldSetFlags()[0] ? this.id : (java.lang.String) defaultValue(fields()[0]);
-        record.title = fieldSetFlags()[1] ? this.title : (java.lang.String) defaultValue(fields()[1]);
-        record.description = fieldSetFlags()[2] ? this.description : (java.lang.String) defaultValue(fields()[2]);
-        record.assignee = fieldSetFlags()[3] ? this.assignee : (java.lang.String) defaultValue(fields()[3]);
-        record.category = fieldSetFlags()[4] ? this.category : (java.lang.String) defaultValue(fields()[4]);
-        record.typeCode = fieldSetFlags()[5] ? this.typeCode : (java.lang.String) defaultValue(fields()[5]);
-        record.status = fieldSetFlags()[6] ? this.status : (com.example.avro.ActionItemStatusAvro) defaultValue(fields()[6]);
-        record.dueDate = fieldSetFlags()[7] ? this.dueDate : (java.time.Instant) defaultValue(fields()[7]);
-        record.createdAt = fieldSetFlags()[8] ? this.createdAt : (java.time.Instant) defaultValue(fields()[8]);
-        record.updatedAt = fieldSetFlags()[9] ? this.updatedAt : (java.time.Instant) defaultValue(fields()[9]);
+        record.uniqueId = fieldSetFlags()[1] ? this.uniqueId : (java.lang.String) defaultValue(fields()[1]);
+        record.title = fieldSetFlags()[2] ? this.title : (java.lang.String) defaultValue(fields()[2]);
+        record.description = fieldSetFlags()[3] ? this.description : (java.lang.String) defaultValue(fields()[3]);
+        record.assignee = fieldSetFlags()[4] ? this.assignee : (java.lang.String) defaultValue(fields()[4]);
+        record.category = fieldSetFlags()[5] ? this.category : (java.lang.String) defaultValue(fields()[5]);
+        record.typeCode = fieldSetFlags()[6] ? this.typeCode : (java.lang.String) defaultValue(fields()[6]);
+        record.status = fieldSetFlags()[7] ? this.status : (com.example.avro.ActionItemStatusAvro) defaultValue(fields()[7]);
+        record.dueDate = fieldSetFlags()[8] ? this.dueDate : (java.time.Instant) defaultValue(fields()[8]);
+        record.createdAt = fieldSetFlags()[9] ? this.createdAt : (java.time.Instant) defaultValue(fields()[9]);
+        record.updatedAt = fieldSetFlags()[10] ? this.updatedAt : (java.time.Instant) defaultValue(fields()[10]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;

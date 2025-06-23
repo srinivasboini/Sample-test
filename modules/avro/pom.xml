@@ -3,14 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.example</groupId>
-        <artifactId>sample-test</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
-
+    
+    <!-- Standalone coordinates - no parent reference -->
+    <groupId>com.example</groupId>
     <artifactId>avro-schemas</artifactId>
-    <version>${avro.schema.version}</version>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    
     <name>Sample Test Avro Schemas</name>
     <description>Avro schema definitions and generated classes for Sample Test project</description>
 
@@ -18,6 +17,18 @@
         <avro.version>1.11.1</avro.version>
         <!-- Control publishing behavior -->
         <avro.publish.enabled>false</avro.publish.enabled>
+        
+        <!-- Standalone properties (normally inherited from parent) -->
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
+        <maven.source.plugin.version>3.3.0</maven.source.plugin.version>
+        <maven.javadoc.plugin.version>3.5.0</maven.javadoc.plugin.version>
+        <maven.deploy.plugin.version>3.1.1</maven.deploy.plugin.version>
+        <flatten.maven.plugin.version>1.5.0</flatten.maven.plugin.version>
+        <build.helper.maven.plugin.version>3.4.0</build.helper.maven.plugin.version>
     </properties>
 
     <dependencies>
@@ -44,6 +55,33 @@
 
     <build>
         <plugins>
+            <!-- Maven Flatten Plugin - Creates standalone POM without parent dependency -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>${flatten.maven.plugin.version}</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>oss</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
             <plugin>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-maven-plugin</artifactId>
@@ -68,6 +106,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -82,6 +121,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -100,7 +140,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>${build.helper.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
@@ -115,6 +155,27 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            
+            <!-- Maven Compiler Plugin - Standalone configuration -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            
+            <!-- Maven Deploy Plugin - Standalone configuration -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven.deploy.plugin.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>

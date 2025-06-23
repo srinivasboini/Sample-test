@@ -6,6 +6,7 @@
 # 3. Thread Pool Management
 # 4. Logging Levels
 # 5. Cache Configuration
+# 6. Database Health Monitor
 
 server:
   port: 18080
@@ -26,6 +27,7 @@ spring:
       group-id: action-items-group
       auto-offset-reset: earliest
       enable-auto-commit: false
+      observation-enabled: true
       topics:
         action-items: action-items-topic
       properties:
@@ -36,13 +38,20 @@ spring:
         fetch.min.bytes: 1
         fetch.max.wait.ms: 500
         specific.avro.reader: true
+        # Connection management to prevent infinite retries
+        reconnect.backoff.ms: 30000
+        reconnect.backoff.max.ms: 300000
+        retry.backoff.ms: 5000
+        # Limit connection timeouts and idle connections
+        request.timeout.ms: 30000
+        connections.max.idle.ms: 540000
     listener:
       ack-mode: MANUAL
       type: SINGLE
-      concurrency: 3
       missing-topics-fatal: false
       # Automatically start listeners only when Kafka is available
-      auto-startup: false
+      # Enable Micrometer observation for Kafka containers
+      observation-enabled: true
 
   datasource:
     url: jdbc:postgresql://localhost:5432/sample_db
@@ -91,11 +100,25 @@ spring:
     simple:
       spec: maximumSize=1000,expireAfterWrite=1h
 
+# Database Health Monitor Configuration
+# ------------------------------------
+# Controls database health monitoring and Kafka consumer management
+database:
+  health:
+    monitor:
+      enabled: true
+      check-interval: 5000  # 5 seconds
+      downtime-threshold: 10000  # 10 seconds
+      recovery-threshold: 5000   # 5 seconds
+      max-consecutive-failures: 3
+
 logging:
   level:
     com.example: DEBUG
     org.springframework.kafka: INFO
     com.example.application.config.DatabaseConfig: INFO
+    com.example.application.config.DatabaseHealthMonitor: INFO
+    com.example.application.controller.DatabaseHealthController: INFO
     com.zaxxer.hikari: INFO
     org.hibernate.SQL: WARN
   pattern:

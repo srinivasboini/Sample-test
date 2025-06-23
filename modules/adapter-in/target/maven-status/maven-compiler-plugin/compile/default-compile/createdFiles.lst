@@ -1,7 +1,6 @@
 com/example/adapter/in/web/CreateMasterConfigurationRequest.class
 com/example/adapter/in/kafka/handler/ActionItemMessageProcessor.class
 com/example/adapter/in/web/ActionItemController.class
-com/example/adapter/in/kafka/config/ObservationConfiguration.class
 com/example/adapter/in/kafka/config/DynamicKafkaConfig.class
 com/example/adapter/in/kafka/ActionItemAvroMapper.class
 com/example/adapter/in/kafka/handler/ActionItemProcessingResultHandler.class

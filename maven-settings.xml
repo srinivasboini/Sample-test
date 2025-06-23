@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 
+          http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <!-- Profile for CI environment -->
+    <profiles>
+        <profile>
+            <id>ci</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <name>Maven Central</name>
+                    <url>https://repo1.maven.org/maven2/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>spring-releases</id>
+                    <name>Spring Releases</name>
+                    <url>https://repo.spring.io/release</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>confluent</id>
+                    <name>Confluent Repository</name>
+                    <url>https://packages.confluent.io/maven/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>central</id>
+                    <name>Maven Central</name>
+                    <url>https://repo1.maven.org/maven2/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+
+    <!-- Mirror configuration to use local repository first -->
+    <mirrors>
+        <mirror>
+            <id>local-repo</id>
+            <mirrorOf>external:*,!central,!spring-releases,!confluent</mirrorOf>
+            <url>file://${user.home}/.m2/repository</url>
+        </mirror>
+    </mirrors>
+
+    <!-- Offline mode for CI to prevent external dependency resolution -->
+    <offline>false</offline>
+
+</settings> 

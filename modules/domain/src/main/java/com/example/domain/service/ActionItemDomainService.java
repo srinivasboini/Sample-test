@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
  *
  * Business Rules:
  * - All action items must have a title
- * - Assignee must be specified for non-PENDING items
+ * - Assignee must be specified for OPEN items
  * - Due dates must be in the future when created
- * - Status transitions must follow defined workflow
+ * - Status transitions must follow defined workflow (OPEN <-> CLOSE)
  * - Category and type code combinations must be valid according to master configuration
  *
  * Validation Rules:
@@ -25,8 +25,8 @@ import org.springframework.stereotype.Service;
  *    - Must be between 3 and 100 characters
  *
  * 2. Description validation:
- *    - Optional for PENDING items
- *    - Required for IN_PROGRESS items
+ *    - Optional for CLOSE items
+ *    - Required for OPEN items
  *    - Must not exceed 1000 characters
  *
  * 3. Date validation:
@@ -89,9 +89,9 @@ public class ActionItemDomainService {
      * @throws IllegalArgumentException if assignee rules are violated
      */
     private void validateAssignee(ActionItem actionItem) {
-        if (actionItem.getStatus() != ActionItemStatus.PENDING
+        if (actionItem.getStatus() == ActionItemStatus.OPEN
             && (actionItem.getAssignee() == null || actionItem.getAssignee().trim().isEmpty())) {
-            throw new IllegalArgumentException("Assignee is required for non-PENDING items");
+            throw new IllegalArgumentException("Assignee is required for OPEN items");
         }
     }
 

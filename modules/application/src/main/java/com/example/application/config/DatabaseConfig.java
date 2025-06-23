@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 
 @Slf4j
-//@Configuration
+@Configuration
 public class DatabaseConfig {
 
     @Value("${spring.datasource.url:jdbc:postgresql://localhost:5432/sample_db}")
@@ -100,7 +100,7 @@ public class DatabaseConfig {
     private volatile boolean isRecovering = false;
     private volatile long lastSuccessfulCheck = System.currentTimeMillis();
 
-    //@Scheduled(fixedRate = 15000) // Check every 15 seconds for faster recovery
+    @Scheduled(fixedRate = 15000) // Check every 15 seconds for faster recovery
     public void healthCheck() {
         log.info("Health check started");
         

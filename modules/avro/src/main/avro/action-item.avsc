@@ -10,6 +10,11 @@
       "doc": "Unique identifier for the action item. Generated as UUID."
     },
     {
+      "name": "uniqueId",
+      "type": "string",
+      "doc": "Business unique identifier for the action item. Used to track action item lifecycle (open/close)."
+    },
+    {
       "name": "title",
       "type": "string",
       "doc": "Title of the action item. Must be between 3 and 100 characters."

@@ -27,6 +27,9 @@ import java.time.LocalDateTime;
 @Value
 @Builder
 public class ProcessActionItemCommand {
+    /** Unique identifier for the action item business entity */
+    String uniqueId;
+
     /** Unique title identifying the action item */
     String title;
 

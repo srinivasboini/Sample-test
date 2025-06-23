@@ -1,11 +1,6 @@
-com/example/application/service/ErrorHandlingService.class
 com/example/application/service/MasterConfigurationService.class
-com/example/application/config/DatabaseConfig.class
 com/example/application/ActionItemApplication.class
 com/example/application/config/ApplicationConfig.class
-com/example/application/config/KafkaConfig.class
 com/example/application/config/MasterConfigurationLoader.class
 com/example/application/config/CacheConfig.class
-com/example/application/aspect/RunAspect.class
-com/example/application/service/ActionItemService.class
 com/example/application/service/ExampleService.class

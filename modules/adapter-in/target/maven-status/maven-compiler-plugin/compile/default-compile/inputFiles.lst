@@ -8,7 +8,6 @@
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/handler/ActionItemProcessingErrorHandler.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/web/ActionItemController.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/config/DynamicKafkaConfig.java
-/Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/config/ObservationConfiguration.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/ActionItemAsyncRequestProvider.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/web/MasterConfigurationController.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/handler/ActionItemProcessingResultHandler.java

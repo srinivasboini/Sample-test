@@ -15,6 +15,7 @@ public class ActionItemAvroMapper {
         ActionItemAvro avro = actionItemAsyncRequest.getConsumerRecord().value();
 
         return ProcessActionItemCommand.builder()
+                .uniqueId(avro.getUniqueId())
                 .title(avro.getTitle())
                 .description(avro.getDescription())
                 .assignee(avro.getAssignee())

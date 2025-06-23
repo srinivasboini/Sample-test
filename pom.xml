@@ -8,14 +8,14 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>modules/commons</module>
+        <module>modules/avro</module>
         <module>modules/domain</module>
         <module>modules/port-in</module>
         <module>modules/port-out</module>
         <module>modules/adapter-in</module>
         <module>modules/adapter-out</module>
-        <module>modules/commons</module>
         <module>modules/application</module>
-        <module>modules/avro</module>
     </modules>
 
     <properties>
@@ -28,7 +28,7 @@
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         
         <!-- Avro Independent Versioning -->
-        <avro.schema.version>1.0.0</avro.schema.version>
+        <avro.schema.version>1.0.0-SNAPSHOT</avro.schema.version>
     </properties>
 
     <dependencyManagement>
@@ -41,7 +41,12 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Project Modules -->
+            <!-- Project Modules - Order matters for dependency resolution -->
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>commons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.example</groupId>
                 <artifactId>domain</artifactId>
@@ -65,11 +70,6 @@
             <dependency>
                 <groupId>com.example</groupId>
                 <artifactId>adapter-out</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.example</groupId>
-                <artifactId>commons</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

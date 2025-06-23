@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>avro-schemas</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>Sample Test Avro Schemas</name>
+  <description>Avro schema definitions and generated classes for Sample Test project</description>
+  <distributionManagement>
+    <repository>
+      <id>nexus-releases</id>
+      <name>Nexus Release Repository</name>
+      <url>${env.NEXUS_BASE_URL}/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>nexus-snapshots</id>
+      <name>Nexus Snapshot Repository</name>
+      <url>${env.NEXUS_BASE_URL}/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.avro</groupId>
+      <artifactId>avro</artifactId>
+      <version>1.11.1</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>

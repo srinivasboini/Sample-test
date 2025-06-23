@@ -8,6 +8,7 @@ import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.slf4j.MDC;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
@@ -35,17 +36,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Observed
 public class ActionItemKafkaConsumer {
 
     private final MessageHandler<ActionItemAsyncRequest> messageHandler;
     private final ActionItemAsyncRequestProvider actionItemAsyncRequestProvider;
 
-    @Observed(name = "kafka.consumer.action.item", 
-              contextualName = "kafka-consumer", 
-              lowCardinalityKeyValues = {"consumer.type", "action-item"})
+
     public void consume(ConsumerRecord<String, ActionItemAvro> record, Acknowledgment acknowledgment) {
         log.info("Received message with key: {} from topic: {} partition: {} offset: {}", record.key(),
                 record.topic(), record.partition(), record.offset());
+        
+                MDC.getCopyOfContextMap();
         ActionItemAsyncRequest actionItemAsyncRequest = actionItemAsyncRequestProvider.getActionItemAsyncRequest(record, acknowledgment);
         messageHandler.handle(actionItemAsyncRequest);
     }

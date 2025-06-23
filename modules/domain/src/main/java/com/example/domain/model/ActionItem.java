@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 public class ActionItem {
     String id;
+    String uniqueId;
     String title;
     String description;
     String assignee;

@@ -1,6 +1,5 @@
 /Users/srinivasboini/workspace/Sample-test/modules/application/src/main/java/com/example/application/config/CacheConfig.java
 /Users/srinivasboini/workspace/Sample-test/modules/application/src/main/java/com/example/application/service/ExampleService.java
-/Users/srinivasboini/workspace/Sample-test/modules/application/src/main/java/com/example/application/config/KafkaConfig.java
 /Users/srinivasboini/workspace/Sample-test/modules/application/src/main/java/com/example/application/ActionItemApplication.java
 /Users/srinivasboini/workspace/Sample-test/modules/application/src/main/java/com/example/application/config/MasterConfigurationLoader.java
 /Users/srinivasboini/workspace/Sample-test/modules/application/src/main/java/com/example/application/aspect/RunAspect.java
