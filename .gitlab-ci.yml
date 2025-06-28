@@ -278,12 +278,34 @@ publish-app-nexus:
       </settings>
       EOF
     
-    # Deploy all modules except Avro (which is handled separately)
-    - mvn $MAVEN_CLI_OPTS deploy -DskipTests -Davro.publish.enabled=false
+    # Update version if provided via CI variable
+    - |
+      if [ ! -z "$DEPLOY_VERSION" ]; then
+        echo "🔄 Updating project version to: $DEPLOY_VERSION"
+        mvn versions:set -DnewVersion="$DEPLOY_VERSION" -DgenerateBackupPoms=false
+        mvn versions:set -DnewVersion="$DEPLOY_VERSION" -DgenerateBackupPoms=false -pl modules/avro
+      fi
+    
+    # Get current version for verification
+    - CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+    - echo "📦 Deploying version: $CURRENT_VERSION"
+    
+    # Deploy only the application module (which contains the fat JAR)
+    - mvn $MAVEN_CLI_OPTS clean deploy -DskipTests -Davro.publish.enabled=false -pl modules/application
+    
+    # Verify deployment
+    - |
+      if [ -f "modules/application/target/application-${CURRENT_VERSION}.jar" ]; then
+        echo "✅ Application JAR verified: application-${CURRENT_VERSION}.jar"
+      else
+        echo "❌ Application JAR not found!"
+        exit 1
+      fi
   dependencies:
     - package
   rules:
     - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $DEPLOY_VERSION
   environment:
     name: nexus-releases
     url: ${NEXUS_BASE_URL}

@@ -7,6 +7,7 @@
 # 4. Logging Levels
 # 5. Cache Configuration
 # 6. Database Health Monitor
+# 7. MDC Interceptor Configuration
 
 server:
   port: 18080
@@ -119,10 +120,14 @@ logging:
     com.example.application.config.DatabaseConfig: INFO
     com.example.application.config.DatabaseHealthMonitor: INFO
     com.example.application.controller.DatabaseHealthController: INFO
+    com.example.adapter.in.kafka.interceptor: DEBUG
+    com.example.commons.mdc: DEBUG
     com.zaxxer.hikari: INFO
     org.hibernate.SQL: WARN
   pattern:
-    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} [correlationId=%X{correlationId}, topic=%X{kafka.topic}, partition=%X{kafka.partition}, offset=%X{kafka.offset}] - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} [correlationId=%X{correlationId}, topic=%X{kafka.topic}, partition=%X{kafka.partition}, offset=%X{kafka.offset}] - %msg%n"
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-},%X{correlationId:-}]"
 
 # Management endpoints for monitoring
 management:

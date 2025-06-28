@@ -1,163 +1,182 @@
 # GitLab CI/CD Variables Configuration
 
-This document lists all the variables that need to be configured in your GitLab project settings for the CI/CD pipeline to work properly.
+This document lists all the required and optional variables for the GitLab CI/CD pipeline.
 
 ## Required Variables
 
 ### Nexus Repository Configuration
-- `NEXUS_BASE_URL`: The base URL of your Nexus repository (e.g., `https://nexus.yourcompany.com`)
-- `NEXUS_USERNAME`: Username for Nexus authentication
-- `NEXUS_PASSWORD`: Password for Nexus authentication (should be marked as masked/protected)
+These variables are **required** for deploying artifacts to Nexus:
 
-### Kubernetes Configuration (if using Kubernetes deployment)
-- `CLUSTER_DOMAIN`: Your cluster domain for application URLs (e.g., `k8s.yourcompany.com`)
-- `KUBECONFIG`: Kubernetes configuration file content (should be marked as masked/protected)
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `NEXUS_USERNAME` | Username for Nexus authentication | `deploy-user` |
+| `NEXUS_PASSWORD` | Password for Nexus authentication | `your-secure-password` |
+| `NEXUS_BASE_URL` | Base URL of your Nexus server | `https://nexus.company.com` |
 
-### Docker Registry (Uses GitLab's built-in registry by default)
-- `CI_REGISTRY`: GitLab container registry URL (automatically provided by GitLab)
-- `CI_REGISTRY_USER`: GitLab registry username (automatically provided by GitLab)
-- `CI_REGISTRY_PASSWORD`: GitLab registry password (automatically provided by GitLab)
+### GitLab Container Registry
+These are automatically provided by GitLab but can be overridden:
 
-## Avro Schema Management Variables
-
-### Required for Avro Publishing
-- `AVRO_SCHEMA_VERSION`: Version to use for Avro schema releases (e.g., `1.2.0`)
-  - Used only when manually publishing Avro schemas
-  - Should NOT contain "SNAPSHOT" for release publishing
-  - Example: `1.2.0`, `2.0.0`, `1.5.1`
-
-### Optional Avro Configuration
-- `CREATE_AVRO_TAG`: Create Git tag when publishing Avro releases (default: `false`)
-  - Set to `true` to automatically create Git tags like `avro-v1.2.0`
-  - Requires CI to have push permissions to the repository
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `CI_REGISTRY` | GitLab Container Registry URL | `registry.gitlab.com` |
+| `CI_REGISTRY_USER` | Registry username | GitLab username |
+| `CI_REGISTRY_PASSWORD` | Registry password | GitLab token |
 
 ## Optional Variables
 
-### Application Configuration
-- `SPRING_PROFILES_ACTIVE`: Override default Spring profiles for different environments
-- `DATABASE_URL`: Override database connection URL
-- `DATABASE_USERNAME`: Override database username
-- `DATABASE_PASSWORD`: Override database password
+### Deployment Control
+These variables control deployment behavior:
+
+| Variable | Description | Default | Values |
+|----------|-------------|---------|--------|
+| `DEPLOY_VERSION` | Version to deploy (overrides POM version) | POM version | `1.0.0`, `1.0.0-SNAPSHOT` |
+| `PUBLISH_AVRO_SCHEMAS` | Enable Avro schema publishing | `false` | `true`, `false` |
+| `AVRO_SCHEMA_VERSION` | Version for Avro schemas (if different from app) | App version | `1.0.0`, `1.0.0-SNAPSHOT` |
+| `CREATE_AVRO_TAG` | Create Git tag for Avro releases | `false` | `true`, `false` |
+
+### Kubernetes Deployment
+These variables are used for Kubernetes deployments:
+
+| Variable | Description | Default | Example |
+|----------|-------------|---------|---------|
+| `CLUSTER_DOMAIN` | Kubernetes cluster domain | `cluster.local` | `k8s.company.com` |
+| `KUBE_CONFIG` | Base64 encoded kubeconfig | - | Base64 string |
 
 ## How to Set Variables
 
+### Method 1: GitLab Project Variables (Recommended)
 1. Go to your GitLab project
-2. Navigate to **Settings** > **CI/CD**
-3. Expand the **Variables** section
-4. Click **Add variable** for each variable listed above
-5. Mark sensitive variables (passwords, tokens) as **Masked** and **Protected**
+2. Navigate to **Settings** → **CI/CD**
+3. Expand **Variables** section
+4. Add each variable:
+   - **Key**: Variable name (e.g., `NEXUS_USERNAME`)
+   - **Value**: Variable value
+   - **Type**: Variable (default) or File
+   - **Environment scope**: All (default) or specific environment
+   - **Protect variable**: Check if it should only be available in protected branches
+   - **Mask variable**: Check to hide the value in job logs
 
-## Avro Publishing Control
+### Method 2: GitLab Group Variables
+For variables shared across multiple projects:
+1. Go to your GitLab group
+2. Navigate to **Settings** → **CI/CD**
+3. Expand **Variables** section
+4. Add variables (same process as project variables)
 
-### Master Control Variable
-- `PUBLISH_AVRO_SCHEMAS`: Master switch for Avro schema publishing (default: `false`)
-  - Set to `true` to enable automatic Avro publishing on main branch
-  - Set to `false` to require manual triggers only
-  - Can be overridden per-job using job variables
+### Method 3: GitLab Instance Variables
+For organization-wide variables:
+1. Go to **Admin Area** → **Settings** → **CI/CD**
+2. Expand **Variables** section
+3. Add variables
 
-### Manual Publishing (Default Behavior)
-When `PUBLISH_AVRO_SCHEMAS=false` (default), Avro schemas are NOT published automatically.
+## Security Best Practices
 
-#### To Publish Avro Snapshots:
-1. **Option A - Manual Job Trigger:**
-   - Go to **CI/CD** → **Pipelines**
-   - Find your pipeline 
-   - Click the ▶️ button next to `publish-avro-snapshot`
+### 1. Protect Sensitive Variables
+Always check **Protect variable** for:
+- `NEXUS_PASSWORD`
+- `KUBE_CONFIG`
+- Any API keys or tokens
 
-2. **Option B - Enable and Push:**
-   - Set `PUBLISH_AVRO_SCHEMAS=true` in GitLab variables
-   - Push to main branch (will auto-publish snapshot)
+### 2. Mask Sensitive Values
+Check **Mask variable** for:
+- Passwords
+- Tokens
+- API keys
+- Any sensitive configuration
 
-3. **Option C - Job-Level Override:**
-   - Trigger job manually with variable override
-   - Set `PUBLISH_AVRO_SCHEMAS=true` as job variable
+### 3. Environment Scoping
+Use environment scoping for:
+- Development-specific configurations
+- Production-specific secrets
+- Environment-specific URLs
 
-#### To Publish Avro Releases:
-1. **Prerequisites:**
-   - Set `AVRO_SCHEMA_VERSION` variable (e.g., `1.2.0`)
-   - Optionally set `CREATE_AVRO_TAG=true`
+## Variable Usage Examples
 
-2. **Option A - Manual Job Trigger:**
-   - Go to **CI/CD** → **Pipelines**
-   - Click the ▶️ button next to `publish-avro-release`
-
-3. **Option B - Enable and Push:**
-   - Set `PUBLISH_AVRO_SCHEMAS=true` 
-   - Set `AVRO_SCHEMA_VERSION=1.2.0`
-   - Push to main branch (will auto-publish release)
-
-### Automatic Publishing (When Enabled)
-When `PUBLISH_AVRO_SCHEMAS=true`, the pipeline will:
-- **Snapshot**: Auto-publish on every main branch push
-- **Release**: Auto-publish when `AVRO_SCHEMA_VERSION` is also set
-
-### Commit Message Triggers
-These work regardless of `PUBLISH_AVRO_SCHEMAS` setting:
-
+### Deploy Specific Version
 ```bash
-# Publish snapshot
-git commit -m "Update user schema [publish-avro-snapshot]"
-
-# Publish release (version specified in message)
-git commit -m "Release payment schema [release-avro:1.2.0]"
+# Set in GitLab CI/CD variables
+DEPLOY_VERSION=1.2.0
 ```
 
-## Environment-Specific Variables
-
-For different environments (dev, staging, production), you can set environment-specific variables by:
-
-1. Creating separate variable keys for each environment:
-   - `DEV_DATABASE_URL`
-   - `STAGING_DATABASE_URL`
-   - `PROD_DATABASE_URL`
-
-2. Or using GitLab environments feature to scope variables to specific environments.
-
-## Kubernetes Secrets
-
-If deploying to Kubernetes, ensure the following secrets are created in your cluster:
-
-### Development Environment
+### Enable Avro Publishing
 ```bash
-kubectl create secret generic app-secrets -n sample-test-dev \
-  --from-literal=database-url="jdbc:postgresql://postgres:5432/sample_db_dev" \
-  --from-literal=database-username="postgres" \
-  --from-literal=database-password="password"
+# Set in GitLab CI/CD variables
+PUBLISH_AVRO_SCHEMAS=true
+AVRO_SCHEMA_VERSION=1.1.0
 ```
 
-### Staging Environment
+### Deploy to Specific Environment
 ```bash
-kubectl create secret generic app-secrets-staging -n sample-test-staging \
-  --from-literal=database-url="jdbc:postgresql://postgres:5432/sample_db_staging" \
-  --from-literal=database-username="postgres" \
-  --from-literal=database-password="password"
+# Set in GitLab CI/CD variables with environment scope
+ENVIRONMENT=production
+CLUSTER_DOMAIN=prod.k8s.company.com
 ```
 
-### Production Environment
-```bash
-kubectl create secret generic app-secrets-prod -n sample-test-prod \
-  --from-literal=database-url="jdbc:postgresql://postgres:5432/sample_db_prod" \
-  --from-literal=database-username="postgres" \
-  --from-literal=database-password="secure_password"
-```
+## Troubleshooting
 
-## Variable Examples
+### Common Issues
 
-Here's a complete example of variables you might set:
+1. **Nexus Authentication Failed**
+   - Verify `NEXUS_USERNAME` and `NEXUS_PASSWORD` are correct
+   - Check if user has deploy permissions
+   - Ensure `NEXUS_BASE_URL` is accessible
 
-| Variable | Value | Type | Protected |
-|----------|-------|------|-----------|
-| `NEXUS_BASE_URL` | `https://nexus.yourcompany.com` | Variable | No |
-| `NEXUS_USERNAME` | `ci-deploy` | Variable | No |
-| `NEXUS_PASSWORD` | `secure_password_123` | Variable | Yes |
-| `AVRO_SCHEMA_VERSION` | `1.0.0` | Variable | No |
-| `CREATE_AVRO_TAG` | `true` | Variable | No |
-| `CLUSTER_DOMAIN` | `k8s.yourcompany.com` | Variable | No |
+2. **Version Not Updated**
+   - Check if `DEPLOY_VERSION` is set correctly
+   - Verify the variable is not protected for your branch
+   - Ensure the version format is valid (e.g., `1.0.0` or `1.0.0-SNAPSHOT`)
 
-## Notes
+3. **Avro Publishing Skipped**
+   - Set `PUBLISH_AVRO_SCHEMAS=true`
+   - Check if `AVRO_SCHEMA_VERSION` is set (for releases)
+   - Verify Avro module exists and has schemas
 
-- **Avro schemas are NOT published automatically** - you control when they're published
-- Application artifacts are still published automatically on tagged releases
-- Docker images are built and pushed to GitLab's container registry
-- Deployments are manual and require approval for each environment
-- Avro schemas have independent versioning from the main application 
+4. **Docker Build Failed**
+   - Check `CI_REGISTRY_*` variables are set
+   - Verify registry permissions
+   - Ensure JAR files are created in package stage
+
+### Debugging Tips
+
+1. **Check Variable Values**
+   ```bash
+   # Add to your CI script to debug
+   echo "NEXUS_BASE_URL: $NEXUS_BASE_URL"
+   echo "DEPLOY_VERSION: $DEPLOY_VERSION"
+   ```
+
+2. **Verify File Existence**
+   ```bash
+   # Check if JAR files exist
+   ls -la modules/application/target/
+   ls -la modules/avro/target/
+   ```
+
+3. **Test Maven Commands Locally**
+   ```bash
+   # Test with your variables
+   export NEXUS_USERNAME=your-username
+   export NEXUS_PASSWORD=your-password
+   export NEXUS_BASE_URL=your-nexus-url
+   mvn clean deploy -DskipTests
+   ```
+
+## Migration from Old Configuration
+
+If you're migrating from an older configuration:
+
+1. **Backup Current Variables**
+   - Export current variables from GitLab
+   - Document any custom configurations
+
+2. **Update Variable Names**
+   - Ensure all variable names match the new configuration
+   - Update any references in custom scripts
+
+3. **Test Deployment**
+   - Run a test deployment with new variables
+   - Verify all artifacts are uploaded correctly
+
+4. **Update Documentation**
+   - Update team documentation
+   - Share new variable requirements 

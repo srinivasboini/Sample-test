@@ -27,8 +27,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         
-        <!-- Avro Independent Versioning -->
-        <avro.schema.version>1.0.0-SNAPSHOT</avro.schema.version>
+        <!-- Use consistent versioning for all modules -->
+        <avro.schema.version>${project.version}</avro.schema.version>
     </properties>
 
     <dependencyManagement>
@@ -109,6 +109,13 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
 
     <distributionManagement>
         <repository>

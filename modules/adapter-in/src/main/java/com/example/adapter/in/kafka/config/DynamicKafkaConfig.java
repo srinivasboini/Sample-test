@@ -52,6 +52,7 @@ public class DynamicKafkaConfig implements KafkaListenerConfigurer {
 
     private final MessageHandler<ActionItemAsyncRequest> messageHandler;
     private final ActionItemAsyncRequestProvider actionItemAsyncRequestProvider;
+    private final MdcKafkaConfig mdcKafkaConfig;
     
     @Autowired
     private ApplicationContext applicationContext;
@@ -60,6 +61,38 @@ public class DynamicKafkaConfig implements KafkaListenerConfigurer {
     public MessageHandlerMethodFactory messageHandlerMethodFactory() {
         DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
         factory.setValidator(new LocalValidatorFactoryBean());
+        return factory;
+    }
+
+    /**
+     * Creates a container factory with MDC interceptor support.
+     * 
+     * @return ConcurrentKafkaListenerContainerFactory with MDC support
+     */
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, Object> mdcKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory = 
+            new ConcurrentKafkaListenerContainerFactory<>();
+        
+        // Use the MDC-enabled consumer factory
+        factory.setConsumerFactory(mdcKafkaConfig.mdcConsumerFactory());
+        
+        // Configure container properties
+        ContainerProperties containerProperties = factory.getContainerProperties();
+        containerProperties.setAckMode(ContainerProperties.AckMode.MANUAL);
+        containerProperties.setObservationEnabled(true);
+        
+        // Configure concurrency
+        factory.setConcurrency(3);
+        
+        // Configure error handler
+        DefaultErrorHandler errorHandler = new DefaultErrorHandler(
+            new FixedBackOff(5000L, 3L)
+        );
+        factory.setCommonErrorHandler(errorHandler);
+        
+        log.info("Created MDC-enabled Kafka listener container factory");
+        
         return factory;
     }
     
