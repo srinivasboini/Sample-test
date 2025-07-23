@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Multi-Repository Branch Creator
+# Multi-Repository Branch Creator with Auto-Clone
 # Usage: ./create_branches.sh <branch_name> [base_branch]
 
 set -e  # Exit on any error
@@ -8,17 +8,18 @@ set -e  # Exit on any error
 # Configuration
 BRANCH_NAME="$1"
 BASE_BRANCH="${2:-main}"  # Default to 'main' if not specified
+WORKSPACE_DIR="${WORKSPACE_DIR:-./workspace}"  # Directory to clone repos into
 
-# List of repository paths (modify these paths to match your repositories)
+# List of repository SSH URLs (modify these URLs to match your repositories)
 REPOSITORIES=(
-    "/path/to/repo1"
-    "/path/to/repo2" 
-    "/path/to/repo3"
-    # Add more repository paths here
+    "git@github.com:username/repo1.git"
+    "git@github.com:username/repo2.git"
+    "git@github.com:username/repo3.git"
+    # Add more repository SSH URLs here
 )
 
 # Alternative: Read repositories from a file
-# You can create a file called 'repos.txt' with one repository path per line
+# You can create a file called 'repos.txt' with one SSH URL per line
 # and uncomment the following lines:
 # REPOSITORIES=()
 # while IFS= read -r line; do
@@ -49,6 +50,20 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# Function to extract repository name from SSH URL
+get_repo_name() {
+    local url="$1"
+    # Extract repo name from SSH URL (e.g., git@github.com:user/repo.git -> repo)
+    basename "$url" .git
+}
+
+# Function to get local repository path
+get_repo_path() {
+    local url="$1"
+    local repo_name=$(get_repo_name "$url")
+    echo "${WORKSPACE_DIR}/${repo_name}"
+}
+
 # Function to check if branch exists
 branch_exists() {
     local repo_path="$1"
@@ -58,21 +73,42 @@ branch_exists() {
     git branch -a | grep -q "^[[:space:]]*${branch}$\|^[[:space:]]*remotes/origin/${branch}$"
 }
 
+# Function to clone repository if it doesn't exist
+clone_repo_if_needed() {
+    local repo_url="$1"
+    local repo_path="$2"
+    local repo_name=$(get_repo_name "$repo_url")
+    
+    if [[ ! -d "$repo_path" ]]; then
+        print_status "Repository not found locally. Cloning $repo_name..."
+        mkdir -p "$WORKSPACE_DIR"
+        git clone "$repo_url" "$repo_path"
+        print_success "Successfully cloned $repo_name"
+    else
+        print_status "Repository $repo_name already exists locally"
+    fi
+}
+
 # Function to create branch in a single repository
 create_branch_in_repo() {
-    local repo_path="$1"
-    local repo_name=$(basename "$repo_path")
+    local repo_url="$1"
+    local repo_path=$(get_repo_path "$repo_url")
+    local repo_name=$(get_repo_name "$repo_url")
     
     print_status "Processing repository: $repo_name"
+    echo "Repository URL: $repo_url"
+    echo "Local path: $repo_path"
+    echo ""
     
-    # Check if directory exists and is a git repository
-    if [[ ! -d "$repo_path" ]]; then
-        print_error "Directory does not exist: $repo_path"
+    # Clone repository if it doesn't exist
+    if ! clone_repo_if_needed "$repo_url" "$repo_path"; then
+        print_error "Failed to clone repository: $repo_name"
         return 1
     fi
     
     cd "$repo_path"
     
+    # Verify it's a git repository
     if [[ ! -d ".git" ]]; then
         print_error "Not a git repository: $repo_path"
         return 1
@@ -111,6 +147,17 @@ create_branch_in_repo() {
     echo ""
 }
 
+# Function to validate SSH URL format
+validate_ssh_url() {
+    local url="$1"
+    if [[ ! "$url" =~ ^git@.*:.*\.git$ ]]; then
+        print_error "Invalid SSH URL format: $url"
+        print_error "Expected format: git@hostname:username/repository.git"
+        return 1
+    fi
+    return 0
+}
+
 # Main function
 main() {
     # Check if branch name is provided
@@ -121,20 +168,41 @@ main() {
         echo "  branch_name  : Name of the new branch to create"
         echo "  base_branch  : Base branch to create from (default: main)"
         echo ""
-        echo "Example: $0 feature/new-feature develop"
+        echo "Environment Variables:"
+        echo "  WORKSPACE_DIR : Directory to clone repositories into (default: ./workspace)"
+        echo ""
+        echo "Examples:"
+        echo "  $0 feature/new-feature"
+        echo "  $0 feature/new-feature develop"
+        echo "  WORKSPACE_DIR=/tmp/repos $0 hotfix/urgent-fix"
         exit 1
     fi
     
+    # Validate all repository URLs
+    print_status "Validating repository URLs..."
+    for repo_url in "${REPOSITORIES[@]}"; do
+        if ! validate_ssh_url "$repo_url"; then
+            exit 1
+        fi
+    done
+    
     print_status "Creating branch '$BRANCH_NAME' from '$BASE_BRANCH' in ${#REPOSITORIES[@]} repositories..."
+    print_status "Workspace directory: $WORKSPACE_DIR"
     echo ""
+    
+    # Create workspace directory if it doesn't exist
+    mkdir -p "$WORKSPACE_DIR"
     
     local success_count=0
     local total_count=${#REPOSITORIES[@]}
+    local failed_repos=()
     
     # Process each repository
-    for repo in "${REPOSITORIES[@]}"; do
-        if create_branch_in_repo "$repo"; then
+    for repo_url in "${REPOSITORIES[@]}"; do
+        if create_branch_in_repo "$repo_url"; then
             ((success_count++))
+        else
+            failed_repos+=("$(get_repo_name "$repo_url")")
         fi
     done
     
@@ -143,8 +211,13 @@ main() {
     print_status "Summary:"
     print_success "Successfully created branches: $success_count/$total_count"
     
+    if [[ ${#failed_repos[@]} -gt 0 ]]; then
+        print_error "Failed repositories: ${failed_repos[*]}"
+    fi
+    
     if [[ $success_count -eq $total_count ]]; then
         print_success "All branches created successfully!"
+        print_status "Repositories are available in: $WORKSPACE_DIR"
     elif [[ $success_count -gt 0 ]]; then
         print_warning "Some branches were created successfully, but there were errors with others."
     else
