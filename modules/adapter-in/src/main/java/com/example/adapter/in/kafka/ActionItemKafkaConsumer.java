@@ -59,7 +59,6 @@ public class ActionItemKafkaConsumer {
         
         try {
             // Update MDC context with specific record information
-            MdcKafkaInterceptor.updateRecordContext(record);
             
             log.info("Received message with key: {} from topic: {} partition: {} offset: {} correlationId: {}", 
                     record.key(), record.topic(), record.partition(), record.offset(), 
@@ -79,9 +78,6 @@ public class ActionItemKafkaConsumer {
                      record.topic(), record.partition(), record.offset(), 
                      MdcKafkaInterceptor.getCorrelationId(), e);
             throw e;
-        } finally {
-            // Clear record-specific context but preserve correlation ID
-            MdcKafkaInterceptor.clearRecordContext();
-        }
+        } 
     }
 }

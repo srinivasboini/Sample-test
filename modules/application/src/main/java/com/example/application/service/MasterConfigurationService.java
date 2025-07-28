@@ -18,36 +18,35 @@ import java.util.stream.Collectors;
 
 /**
  * Application service that orchestrates master configuration operations.
- *
+ * <p>
  * This service acts as a facade between the outer layers (adapters) and the domain layer,
  * coordinating the execution of master configuration business operations while maintaining 
  * transaction boundaries.
  *
- * Responsibilities:
- * 1. Transaction Management
- *    - Ensures atomic operations
- *    - Manages database consistency
+ * <b>Responsibilities:</b>
+ * <ul>
+ *   <li><b>Transaction Management:</b> Ensures atomic operations and manages database consistency.</li>
+ *   <li><b>Flow Orchestration:</b> Coordinates between adapters and domain, manages the sequence of operations, and handles cross-cutting concerns.</li>
+ *   <li><b>Use Case Implementation:</b> Implements the MasterConfigurationUseCase port, translates commands to domain operations, and coordinates persistence operations.</li>
+ * </ul>
  *
- * 2. Flow Orchestration
- *    - Coordinates between adapters and domain
- *    - Manages the sequence of operations
- *    - Handles cross-cutting concerns
+ * <b>Flow Sequence:</b>
+ * <ol>
+ *   <li>Receive command from adapter</li>
+ *   <li>Build domain model</li>
+ *   <li>Validate through domain service</li>
+ *   <li>Persist through output port</li>
+ *   <li>Return result</li>
+ * </ol>
  *
- * 3. Use Case Implementation
- *    - Implements the MasterConfigurationUseCase port
- *    - Translates commands to domain operations
- *    - Coordinates persistence operations
+ * <b>Validation Strategy:</b>
+ * <ul>
+ *   <li>Uses domain service for business rule validation, provides caching, ensures consistent validation logic, and includes proper logging and error handling.</li>
+ * </ul>
  *
- * Flow Sequence:
- * 1. Receive command from adapter
- * 2. Build domain model
- * 3. Validate through domain service
- * 4. Persist through output port
- * 5. Return result
- *
- * @see MasterConfigurationPort
- * @see MasterConfigurationUseCase
- * @see MasterConfigurationDomainService
+ * @see com.example.port.out.MasterConfigurationPort
+ * @see com.example.port.in.MasterConfigurationUseCase
+ * @see com.example.domain.service.MasterConfigurationDomainService
  */
 @Service
 @RequiredArgsConstructor
@@ -58,16 +57,16 @@ public class MasterConfigurationService implements MasterConfigurationUseCase {
 
     /**
      * Creates a new master configuration by coordinating domain and persistence operations.
-     *
+     * <p>
      * This method:
-     * 1. Creates a domain model from the command
-     * 2. Validates through domain service
-     * 3. Checks for duplicates
-     * 4. Persists it through the output port
+     * <ol>
+     *   <li>Creates a domain model from the command</li>
+     *   <li>Validates through domain service</li>
+     *   <li>Checks for duplicates</li>
+     *   <li>Persists it through the output port</li>
+     * </ol>
      *
-     * Transaction Boundary:
-     * - Entire operation is atomic
-     * - Rollback occurs if any step fails
+     * <b>Transaction Boundary:</b> Entire operation is atomic; rollback occurs if any step fails.
      *
      * @param command The command containing master configuration details
      * @return The created and persisted master configuration
@@ -96,6 +95,8 @@ public class MasterConfigurationService implements MasterConfigurationUseCase {
 
     /**
      * Creates multiple master configurations in a single transaction.
+     * <p>
+     * This method processes a batch of commands, validates, checks for duplicates, enriches, and persists them.
      *
      * @param commands List of commands containing master configuration details
      * @return List of created and persisted master configurations
@@ -124,6 +125,7 @@ public class MasterConfigurationService implements MasterConfigurationUseCase {
 
     /**
      * Retrieves all active master configurations.
+     * <p>
      * This method is cached to improve performance.
      *
      * @return List of active master configurations
@@ -150,6 +152,7 @@ public class MasterConfigurationService implements MasterConfigurationUseCase {
 
     /**
      * Checks if a master configuration exists and is active.
+     * <p>
      * This method is cached to improve performance for validation.
      *
      * @param category The category to check
@@ -165,7 +168,8 @@ public class MasterConfigurationService implements MasterConfigurationUseCase {
 
     /**
      * Validates a category-type combination using domain service.
-     * This method is cached to improve performance.
+     * <p>
+     * This method is cached to improve performance and delegates to the domain service for business rule validation.
      *
      * @param category The category to validate
      * @param typeCode The type code to validate
@@ -179,6 +183,8 @@ public class MasterConfigurationService implements MasterConfigurationUseCase {
 
     /**
      * Builds a domain model from the incoming command.
+     * <p>
+     * Generates a new unique ID and sets creation/update timestamps.
      *
      * @param command Source command with master configuration details
      * @return New MasterConfiguration domain model
@@ -197,6 +203,8 @@ public class MasterConfigurationService implements MasterConfigurationUseCase {
 
     /**
      * Validates that no duplicate active configuration exists.
+     * <p>
+     * Throws an exception if a duplicate is found.
      *
      * @param masterConfiguration The master configuration to validate
      * @throws IllegalArgumentException if a duplicate active configuration exists
@@ -215,6 +223,7 @@ public class MasterConfigurationService implements MasterConfigurationUseCase {
 
     /**
      * Manually clears all master configuration caches.
+     * <p>
      * This method is useful for troubleshooting cache-related issues.
      */
     @CacheEvict(value = {"categoryTypeValidation", "masterConfigurations"}, allEntries = true)

@@ -16,10 +16,7 @@
             <groupId>com.example</groupId>
             <artifactId>port-in</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>commons</artifactId>
-        </dependency>
+        
         <dependency>
             <groupId>com.example</groupId>
             <artifactId>avro-schemas</artifactId>

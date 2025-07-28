@@ -1,12 +1,13 @@
+/Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/config/MdcKafkaConfig.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/ActionItemAsyncRequest.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/handler/ActionItemAsyncMessageHandler.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/handler/OffsetCommitter.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/ActionItemAvroMapper.java
+/Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/interceptor/MdcKafkaInterceptor.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/web/CreateMasterConfigurationRequest.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/handler/MessageHandler.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/ActionItemKafkaConsumer.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/handler/ActionItemProcessingErrorHandler.java
-/Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/web/ActionItemController.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/config/DynamicKafkaConfig.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/kafka/ActionItemAsyncRequestProvider.java
 /Users/srinivasboini/workspace/Sample-test/modules/adapter-in/src/main/java/com/example/adapter/in/web/MasterConfigurationController.java

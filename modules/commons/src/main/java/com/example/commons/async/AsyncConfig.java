@@ -20,7 +20,6 @@ import java.util.concurrent.Executor;
  * This configuration ensures that MDC context and other contextual information
  * are properly propagated across async operations for distributed tracing.
  */
-@Slf4j
 @Configuration
 public class AsyncConfig {
 

@@ -17,51 +17,45 @@ import java.util.UUID;
 
 /**
  * Application service that orchestrates the flow of action item processing.
- *
+ * <p>
  * This service acts as a facade between the outer layers (adapters) and the domain layer,
  * coordinating the execution of business operations while maintaining transaction boundaries.
  *
- * Responsibilities:
- * 1. Transaction Management
- *    - Ensures atomic operations
- *    - Manages database consistency
+ * <b>Responsibilities:</b>
+ * <ul>
+ *   <li><b>Transaction Management:</b> Ensures atomic operations and manages database consistency.</li>
+ *   <li><b>Flow Orchestration:</b> Coordinates between adapters and domain, manages the sequence of operations, and handles cross-cutting concerns.</li>
+ *   <li><b>Use Case Implementation:</b> Implements the ReceiveActionItemUseCase port, translates commands to domain operations, and coordinates persistence operations.</li>
+ * </ul>
  *
- * 2. Flow Orchestration
- *    - Coordinates between adapters and domain
- *    - Manages the sequence of operations
- *    - Handles cross-cutting concerns
+ * <b>Flow Sequence:</b>
+ * <ol>
+ *   <li>Receive command from adapter</li>
+ *   <li>Check if action item with uniqueId exists</li>
+ *   <li>Build or update domain model</li>
+ *   <li>Validate category-type combination exists in master configuration</li>
+ *   <li>Validate through domain service</li>
+ *   <li>Persist through output port</li>
+ *   <li>Return result</li>
+ * </ol>
  *
- * 3. Use Case Implementation
- *    - Implements the ReceiveActionItemUseCase port
- *    - Translates commands to domain operations
- *    - Coordinates persistence operations
+ * <b>Business Rules:</b>
+ * <ul>
+ *   <li>Action items can be opened (OPEN status) or closed (CLOSE status).</li>
+ *   <li>Only one record per uniqueId should exist at any time.</li>
+ *   <li>Closed items can be reopened by updating status to OPEN.</li>
+ *   <li>Open items can be closed by updating status to CLOSE.</li>
+ *   <li>If no record exists with uniqueId, creates new record with OPEN status only.</li>
+ * </ul>
  *
- * Flow Sequence:
- * 1. Receive command from adapter
- * 2. Check if action item with uniqueId exists
- * 3. Build or update domain model
- * 4. Validate category-type combination exists in master configuration
- * 5. Validate through domain service
- * 6. Persist through output port
- * 7. Return result
+ * <b>Validation Strategy:</b>
+ * <ul>
+ *   <li>Uses MasterConfigurationService.validateCategoryTypeCode() which leverages domain service for business rule validation, provides caching, ensures consistent validation logic, and includes proper logging and error handling.</li>
+ * </ul>
  *
- * Business Rules:
- * - Action items can be opened (OPEN status) or closed (CLOSE status)
- * - Only one record per uniqueId should exist at any time
- * - Closed items can be reopened by updating status to OPEN
- * - Open items can be closed by updating status to CLOSE
- * - If no record exists with uniqueId, creates new record with OPEN status only
- *
- * Validation Strategy:
- * - Uses MasterConfigurationService.validateCategoryTypeCode() which:
- *   - Leverages domain service for business rule validation
- *   - Provides caching for improved performance
- *   - Ensures consistent validation logic across the application
- *   - Includes proper logging and error handling
- *
- * @see ActionItemDomainService
- * @see SaveActionItemPort
- * @see ReceiveActionItemUseCase
+ * @see com.example.domain.service.ActionItemDomainService
+ * @see com.example.port.out.SaveActionItemPort
+ * @see com.example.port.in.ReceiveActionItemUseCase
  * @see MasterConfigurationService#validateCategoryTypeCode(String, String)
  */
 @Service
@@ -75,22 +69,24 @@ public class ActionItemService implements ReceiveActionItemUseCase {
 
     /**
      * Processes an action item command by coordinating domain and persistence operations.
+     * <p>
+     * Implements the business logic for action item lifecycle:
+     * <ol>
+     *   <li>Checks if action item with uniqueId exists</li>
+     *   <li>Creates or updates domain model based on existence</li>
+     *   <li>Validates category-type combination exists in master configuration</li>
+     *   <li>Validates it through domain service</li>
+     *   <li>Persists it through the output port</li>
+     * </ol>
      *
-     * This method implements the business logic for action item lifecycle:
-     * 1. Checks if action item with uniqueId exists
-     * 2. Creates or updates domain model based on existence
-     * 3. Validates category-type combination exists in master configuration
-     * 4. Validates it through domain service
-     * 5. Persists it through the output port
+     * <b>Business Logic:</b>
+     * <ul>
+     *   <li>If no record exists with uniqueId: creates new record (only with OPEN status)</li>
+     *   <li>If record exists with uniqueId: updates existing record (can be OPEN or CLOSE)</li>
+     *   <li>Ensures only one record per uniqueId exists at any time</li>
+     * </ul>
      *
-     * Business Logic:
-     * - If no record exists with uniqueId: creates new record (only with OPEN status)
-     * - If record exists with uniqueId: updates existing record (can be OPEN or CLOSE)
-     * - Ensures only one record per uniqueId exists at any time
-     *
-     * Transaction Boundary:
-     * - Entire operation is atomic
-     * - Rollback occurs if any step fails
+     * <b>Transaction Boundary:</b> Entire operation is atomic; rollback occurs if any step fails.
      *
      * @param command The command containing action item details
      * @return The processed and persisted action item
@@ -140,7 +136,9 @@ public class ActionItemService implements ReceiveActionItemUseCase {
 
     /**
      * Updates an existing action item with new command data.
-     * 
+     * <p>
+     * Copies over immutable fields and updates mutable fields from the command.
+     *
      * @param existing The existing action item
      * @param command The command with updated data
      * @return Updated action item domain model
@@ -163,13 +161,8 @@ public class ActionItemService implements ReceiveActionItemUseCase {
 
     /**
      * Validates that the category and type code combination exists in the master configuration.
-     * 
-     * This method delegates to MasterConfigurationService.validateCategoryTypeCode() which:
-     * - Uses the domain service for proper business rule validation
-     * - Leverages caching for improved performance 
-     * - Provides consistent validation logic across the application
-     * - Includes proper logging and detailed error messages
-     * - Handles all edge cases and business rules centrally
+     * <p>
+     * Delegates to MasterConfigurationService.validateCategoryTypeCode(), which uses the domain service for business rule validation, leverages caching, and provides consistent validation logic and error handling.
      *
      * @param category The category to validate
      * @param typeCode The type code to validate
@@ -186,6 +179,8 @@ public class ActionItemService implements ReceiveActionItemUseCase {
 
     /**
      * Builds a new domain model from the incoming command.
+     * <p>
+     * Generates a new unique ID and sets creation/update timestamps.
      *
      * @param command Source command with action item details
      * @return New ActionItem domain model

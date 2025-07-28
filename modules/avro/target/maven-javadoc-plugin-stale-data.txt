@@ -1,0 +1,56 @@
+@options
+@packages
+-classpath
+'/Users/srinivasboini/.m2/repository/org/apache/avro/avro/1.11.1/avro-1.11.1.jar:/Users/srinivasboini/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.12.7/jackson-core-2.12.7.jar:/Users/srinivasboini/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.12.7/jackson-databind-2.12.7.jar:/Users/srinivasboini/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.12.7/jackson-annotations-2.12.7.jar:/Users/srinivasboini/.m2/repository/org/apache/commons/commons-compress/1.21/commons-compress-1.21.jar:/Users/srinivasboini/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'17'
+-sourcepath
+'/Users/srinivasboini/workspace/Sample-test/modules/avro/src/main/java:/Users/srinivasboini/workspace/Sample-test/modules/avro/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2025. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs'
+-docencoding
+'UTF-8'
+-Xdoclint:none
+-doctitle
+'Sample Test Avro Schemas 1.0.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'Sample Test Avro Schemas 1.0.0-SNAPSHOT API'
+com.example.avro
+/Users/srinivasboini/.m2/repository/org/apache/avro/avro/1.11.1/avro-1.11.1.jar = 1658866639000
+/Users/srinivasboini/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.12.7/jackson-core-2.12.7.jar = 1653586116000
+/Users/srinivasboini/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.12.7/jackson-databind-2.12.7.jar = 1653587148000
+/Users/srinivasboini/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.12.7/jackson-annotations-2.12.7.jar = 1653585828000
+/Users/srinivasboini/.m2/repository/org/apache/commons/commons-compress/1.21/commons-compress-1.21.jar = 1707285299357
+/Users/srinivasboini/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar = 1707267485247
+/Users/srinivasboini/workspace/Sample-test/modules/avro/src/main/java = 1748693358168
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/generated-sources/annotations = 1751880333142
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/tag-search-index.js = 1751880335861
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/overview-tree.html = 1751880335830
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/module-search-index.js = 1751880335858
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/index.html = 1751880335889
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/package-search-index.js = 1751880335859
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/link.svg = 1751880335900
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/serialized-form.html = 1751880335790
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/index-all.html = 1751880335884
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/allpackages-index.html = 1751880335857
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/member-search-index.js = 1751880335860
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/copy.svg = 1751880335899
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/script.js = 1751880335898
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/stylesheet.css = 1751880335897
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/search-page.js = 1751880335903
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/help-doc.html = 1751880335894
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/element-list = 1751880335758
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/search.html = 1751880335887
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/allclasses-index.html = 1751880335854
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/type-search-index.js = 1751880335859
+/Users/srinivasboini/workspace/Sample-test/modules/avro/target/apidocs/search.js = 1751880335901

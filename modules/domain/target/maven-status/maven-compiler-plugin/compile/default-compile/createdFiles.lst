@@ -3,9 +3,11 @@ com/example/domain/service/ActionItemDomainService.class
 com/example/domain/service/MasterConfigurationDomainService.class
 com/example/domain/model/ActionItemConfiguration$ActionItemConfigurationBuilder.class
 com/example/domain/model/ActionItemStatus.class
+com/example/domain/model/TypeCodeCount.class
 com/example/domain/model/ActionItem$ActionItemBuilder.class
 com/example/domain/service/ActionItemConfigurationService.class
 com/example/domain/model/InvalidCategoryTypeException.class
+com/example/domain/model/TypeCodeCount$TypeCodeCountBuilder.class
 com/example/domain/model/ActionItem.class
 com/example/domain/model/ActionItemConfiguration.class
 com/example/domain/model/MasterConfiguration$MasterConfigurationBuilder.class

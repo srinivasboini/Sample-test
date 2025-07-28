@@ -2,13 +2,9 @@ package com.example.domain.service;
 
 import com.example.domain.model.InvalidCategoryTypeException;
 import com.example.domain.model.MasterConfiguration;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@Slf4j
 public class MasterConfigurationDomainService {
     
     /**
@@ -16,14 +12,9 @@ public class MasterConfigurationDomainService {
      * This method validates business rules for master configurations
      */
     public void validateCategoryTypeCode(String category, String typeCode, boolean exists) {
-        log.debug("Validating category-type combination: category={}, typeCode={}", category, typeCode);
-        
         if (!exists) {
-            log.warn("Invalid category-type combination: category={}, typeCode={}", category, typeCode);
             throw new InvalidCategoryTypeException(category, typeCode);
         }
-        
-        log.debug("Category-type combination is valid: category={}, typeCode={}", category, typeCode);
     }
     
     /**
@@ -45,9 +36,6 @@ public class MasterConfigurationDomainService {
         if (configuration.getDescription() == null || configuration.getDescription().trim().isEmpty()) {
             throw new IllegalArgumentException("Description cannot be null or empty");
         }
-        
-        log.debug("Master configuration validation passed for category={}, typeCode={}", 
-                 configuration.getCategory(), configuration.getTypeCode());
     }
     
     /**
@@ -59,8 +47,6 @@ public class MasterConfigurationDomainService {
         }
         
         configurations.forEach(this::validateMasterConfiguration);
-        
-        log.info("Validated {} master configurations", configurations.size());
     }
     
     /**
@@ -68,9 +54,6 @@ public class MasterConfigurationDomainService {
      */
     public MasterConfiguration enrichMasterConfiguration(MasterConfiguration configuration) {
         // Apply any business enrichment logic here
-        log.debug("Enriching master configuration for category={}, typeCode={}", 
-                 configuration.getCategory(), configuration.getTypeCode());
-        
         return configuration;
     }
 } 

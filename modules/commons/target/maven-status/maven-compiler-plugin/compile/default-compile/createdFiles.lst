@@ -1,3 +1,4 @@
 com/example/commons/annotation/Run.class
 com/example/commons/async/AsyncConfig.class
+com/example/commons/mdc/MdcUtils.class
 com/example/commons/exception/BusinessException.class

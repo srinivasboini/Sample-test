@@ -19,7 +19,6 @@ import java.util.function.Supplier;
  * - Utility methods for common MDC operations
  * - Thread-safe operations
  */
-@Slf4j
 public class MdcUtils {
 
     // Standard MDC keys
@@ -47,7 +46,6 @@ public class MdcUtils {
     public static String setCorrelationId() {
         String correlationId = UUID.randomUUID().toString();
         MDC.put(CORRELATION_ID_KEY, correlationId);
-        log.debug("Set correlation ID: {}", correlationId);
         return correlationId;
     }
 
@@ -59,7 +57,6 @@ public class MdcUtils {
     public static void setCorrelationId(String correlationId) {
         if (correlationId != null && !correlationId.trim().isEmpty()) {
             MDC.put(CORRELATION_ID_KEY, correlationId);
-            log.debug("Set correlation ID: {}", correlationId);
         }
     }
 
@@ -316,10 +313,6 @@ public class MdcUtils {
      */
     public static void logCurrentContext() {
         Map<String, String> context = getContext();
-        if (context != null && !context.isEmpty()) {
-            log.debug("Current MDC context: {}", context);
-        } else {
-            log.debug("No MDC context set");
-        }
+        
     }
 } 

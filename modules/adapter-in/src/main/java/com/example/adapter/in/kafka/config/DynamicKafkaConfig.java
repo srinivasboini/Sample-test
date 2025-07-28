@@ -44,7 +44,33 @@ import java.util.HashMap;
 import java.lang.reflect.Field;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 import org.springframework.kafka.listener.MessageListenerContainer;
+import org.springframework.kafka.listener.RecordFilterStrategy;
+import com.example.avro.ActionItemAvro;
+import com.example.avro.ActionItemStatusAvro;
 
+/**
+ * Kafka configuration for dynamic listener registration and MDC (Mapped Diagnostic Context) integration.
+ * <p>
+ * This configuration class sets up Kafka listener containers with advanced features such as:
+ * <ul>
+ *   <li>Dynamic topic registration</li>
+ *   <li>MDC context propagation for distributed tracing</li>
+ *   <li>Custom error handling and offset management</li>
+ *   <li>Record filtering (e.g., filtering out CANCELLED status)</li>
+ *   <li>Concurrency and batch processing configuration</li>
+ *   <li>Logging and inspection of container properties</li>
+ * </ul>
+ *
+ * <b>Responsibilities:</b>
+ * <ul>
+ *   <li>Registers Kafka listeners for multiple topics at runtime.</li>
+ *   <li>Configures MDC-enabled consumer factories and listener containers.</li>
+ *   <li>Sets up error handlers, record filters, and concurrency settings.</li>
+ *   <li>Provides utility methods for logging and inspecting container properties.</li>
+ * </ul>
+ *
+ * <b>Usage:</b> Used by Spring Boot to configure Kafka infrastructure at application startup.
+ */
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
@@ -57,6 +83,11 @@ public class DynamicKafkaConfig implements KafkaListenerConfigurer {
     @Autowired
     private ApplicationContext applicationContext;
 
+    /**
+     * Creates a MessageHandlerMethodFactory with bean validation support.
+     *
+     * @return MessageHandlerMethodFactory for validating incoming messages
+     */
     @Bean
     public MessageHandlerMethodFactory messageHandlerMethodFactory() {
         DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
@@ -66,7 +97,9 @@ public class DynamicKafkaConfig implements KafkaListenerConfigurer {
 
     /**
      * Creates a container factory with MDC interceptor support.
-     * 
+     * <p>
+     * Configures consumer factory, acknowledgment mode, error handler, concurrency, and record filter.
+     *
      * @return ConcurrentKafkaListenerContainerFactory with MDC support
      */
     @Bean
@@ -90,6 +123,17 @@ public class DynamicKafkaConfig implements KafkaListenerConfigurer {
             new FixedBackOff(5000L, 3L)
         );
         factory.setCommonErrorHandler(errorHandler);
+
+        // Configure RecordFilterStrategy to filter out CANCELLED status
+        factory.setRecordFilterStrategy(new RecordFilterStrategy<String, Object>() {
+            @Override
+            public boolean filter(ConsumerRecord<String, Object> consumerRecord) {
+                if (consumerRecord.value() instanceof ActionItemAvro actionItemAvro) {
+                    return ActionItemStatusAvro.CANCELLED.equals(actionItemAvro.getStatus());
+                }
+                return false;
+            }
+        });
         
         log.info("Created MDC-enabled Kafka listener container factory");
         
@@ -99,7 +143,10 @@ public class DynamicKafkaConfig implements KafkaListenerConfigurer {
 
     
     /**
-     * Logs all container properties for inspection
+     * Logs all container properties for inspection using reflection.
+     *
+     * @param containerProperties The container properties to log
+     * @param containerName The name of the container for logging context
      */
     private void logContainerProperties(ContainerProperties containerProperties, String containerName) {
         log.info("=== Container Properties for {} ===", containerName);
@@ -131,7 +178,8 @@ public class DynamicKafkaConfig implements KafkaListenerConfigurer {
     }
     
     /**
-     * Access and log all container properties from the application context
+     * Accesses and logs all container properties from the application context.
+     * Useful for debugging and verifying configuration at runtime.
      */
     public void logAllContainerProperties() {
         log.info("=== Accessing All Kafka Container Properties ===");
@@ -175,6 +223,13 @@ public class DynamicKafkaConfig implements KafkaListenerConfigurer {
         log.info("=== End All Container Properties ===");
     }
 
+    /**
+     * Configures dynamic Kafka listeners for a predefined set of topics.
+     * <p>
+     * Registers listeners for each topic and logs configuration details.
+     *
+     * @param registrar The registrar used to register endpoints
+     */
     @Override
     public void configureKafkaListeners(KafkaListenerEndpointRegistrar registrar) {
         List<String> topics = List.of("action-items-topic-1", "action-items-topic-2", "action-items-topic-3");
@@ -194,6 +249,15 @@ public class DynamicKafkaConfig implements KafkaListenerConfigurer {
         }
     }
 
+    /**
+     * Registers a Kafka listener endpoint for a specific topic.
+     * <p>
+     * Configures endpoint ID, group ID, bean, method, and message handler factory.
+     *
+     * @param registrar The registrar to register the endpoint with
+     * @param topic The topic to listen to
+     * @throws NoSuchMethodException if the consume method is not found
+     */
     private void registerKafkaListener(KafkaListenerEndpointRegistrar registrar, String topic)
             throws NoSuchMethodException {
 

@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"com.example.avro","l":"ActionItemAvro"},{"p":"com.example.avro","l":"ActionItemStatusAvro"},{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.example.avro","l":"ActionItemAvro.Builder"}];updateSearchResults();
