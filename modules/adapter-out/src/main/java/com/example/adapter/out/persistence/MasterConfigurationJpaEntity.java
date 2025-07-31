@@ -11,6 +11,20 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+/**
+ * JPA entity representing a master configuration record in the database.
+ * <p>
+ * Stores category, type code, description, active status, and audit timestamps for
+ * master configuration management.
+ * <p>
+ * <b>Responsibilities:</b>
+ * <ul>
+ *   <li>Persists master configuration data for validation and lookup</li>
+ *   <li>Supports unique constraints and indexing for efficient queries</li>
+ *   <li>Enables auditing of creation and update times</li>
+ * </ul>
+ * <b>Usage:</b> Used by persistence adapters and repositories to manage master configuration records.
+ */
 @Entity
 @Table(name = "master_configuration", 
        indexes = {

@@ -6,6 +6,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Persistence adapter for storing processing errors using JPA.
+ * <p>
+ * Implements the PersistErrorPort to persist ProcessingError domain objects as ErrorEntity JPA entities.
+ * Handles conversion, transaction management, and repository interaction for error persistence.
+ * <p>
+ * <b>Responsibilities:</b>
+ * <ul>
+ *   <li>Converts ProcessingError domain objects to ErrorEntity JPA entities</li>
+ *   <li>Persists errors using the ErrorRepository</li>
+ *   <li>Handles transaction boundaries for error persistence</li>
+ * </ul>
+ * <b>Usage:</b> Used by application and domain layers to persist error information for diagnostics and auditing.
+ */
 @Component
 @RequiredArgsConstructor
 public class JpaErrorPersistenceAdapter implements PersistErrorPort {

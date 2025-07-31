@@ -3,6 +3,21 @@ package com.example.adapter.out.persistence;
 import com.example.domain.model.ActionItem;
 import org.springframework.stereotype.Component;
 
+/**
+ * Maps between ActionItem domain models and JPA entities for persistence operations.
+ * <p>
+ * This component is responsible for converting ActionItem objects between their domain
+ * representation and their database (JPA entity) representation. It ensures that all
+ * relevant fields are mapped correctly for both persistence and retrieval.
+ * <p>
+ * <b>Responsibilities:</b>
+ * <ul>
+ *   <li>Converts ActionItem domain objects to JPA entities for storage</li>
+ *   <li>Converts JPA entities to ActionItem domain objects for business logic</li>
+ *   <li>Ensures field consistency and handles mapping logic</li>
+ * </ul>
+ * <b>Usage:</b> Used by persistence adapters and repositories to translate between domain and entity layers.
+ */
 @Component
 public class ActionItemMapper {
 

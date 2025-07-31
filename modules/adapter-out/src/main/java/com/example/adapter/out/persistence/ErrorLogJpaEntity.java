@@ -8,6 +8,19 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * JPA entity representing error logs stored in the database.
+ * <p>
+ * This entity captures error messages, stack traces, error codes, timestamps, and source information
+ * for persistent error tracking and analysis.
+ * <p>
+ * <b>Responsibilities:</b>
+ * <ul>
+ *   <li>Stores error log details for troubleshooting and auditing</li>
+ *   <li>Supports persistence and retrieval via JPA repositories</li>
+ * </ul>
+ * <b>Usage:</b> Used by error handling and logging components to persist error information.
+ */
 @Entity
 @Table(name = "error_logs")
 @Data

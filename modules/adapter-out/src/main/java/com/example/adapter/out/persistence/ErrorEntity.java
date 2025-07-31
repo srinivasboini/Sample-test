@@ -6,6 +6,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 
+/**
+ * JPA entity representing a processing error in the system.
+ * <p>
+ * Captures error type, message, stack trace, payload, occurrence time, and status for
+ * persistent error management and diagnostics.
+ * <p>
+ * <b>Responsibilities:</b>
+ * <ul>
+ *   <li>Stores error details for failed processing events</li>
+ *   <li>Supports persistence and retrieval via JPA repositories</li>
+ * </ul>
+ * <b>Usage:</b> Used by error persistence adapters and repositories for error tracking and analysis.
+ */
 @Entity
 @Table(name = "processing_errors")
 @Getter

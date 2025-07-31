@@ -3,6 +3,21 @@ package com.example.adapter.out.persistence;
 import com.example.domain.model.ProcessingError;
 import org.springframework.stereotype.Component;
 
+/**
+ * Maps between ProcessingError domain models and ErrorEntity JPA entities for persistence operations.
+ * <p>
+ * This component is responsible for converting ProcessingError objects between their domain
+ * representation and their database (JPA entity) representation. It ensures that all
+ * relevant fields are mapped correctly for both persistence and retrieval.
+ * <p>
+ * <b>Responsibilities:</b>
+ * <ul>
+ *   <li>Converts ProcessingError domain objects to ErrorEntity JPA entities for storage</li>
+ *   <li>Converts ErrorEntity JPA entities to ProcessingError domain objects for business logic</li>
+ *   <li>Ensures field consistency and handles mapping logic</li>
+ * </ul>
+ * <b>Usage:</b> Used by error persistence adapters and repositories to translate between domain and entity layers.
+ */
 @Component
 public class ErrorMapper {
     
