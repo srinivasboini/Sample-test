@@ -8,6 +8,23 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+/**
+ * Maps Avro-based ActionItem messages to domain commands for processing.
+ * <p>
+ * This component is responsible for converting Avro records received from Kafka into
+ * domain-specific command objects that can be handled by the application layer. It ensures
+ * that all relevant fields are mapped and that date/time and status conversions are handled
+ * appropriately.
+ * <p>
+ * <b>Responsibilities:</b>
+ * <ul>
+ *   <li>Extracts and maps fields from Avro messages to domain commands</li>
+ *   <li>Handles status and date/time conversions</li>
+ *   <li>Provides default values for missing or null fields</li>
+ * </ul>
+ * <b>Usage:</b> Used by Kafka consumers and message processors to translate incoming Avro messages
+ * into actionable domain commands.
+ */
 @Component
 public class ActionItemAvroMapper {
 

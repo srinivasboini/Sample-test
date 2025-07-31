@@ -12,6 +12,22 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * REST controller for managing master configuration entities via HTTP endpoints.
+ * <p>
+ * Exposes API endpoints for creating, retrieving, validating, and debugging master configuration
+ * records. Delegates business logic to the MasterConfigurationUseCase and handles request/response
+ * mapping for the web layer.
+ * <p>
+ * <b>Responsibilities:</b>
+ * <ul>
+ *   <li>Handles HTTP requests for master configuration operations</li>
+ *   <li>Delegates to use case interfaces for business logic</li>
+ *   <li>Performs request validation and response formatting</li>
+ *   <li>Provides endpoints for batch and single record operations</li>
+ * </ul>
+ * <b>Usage:</b> Used by clients to interact with master configuration data via RESTful APIs.
+ */
 @RestController
 @RequestMapping("/api/master-configurations")
 @RequiredArgsConstructor
